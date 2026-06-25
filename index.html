@@ -62,7 +62,7 @@
   .tomaa-cfg .field{display:flex;flex-direction:column;gap:10px;margin-bottom:2px}
   .tomaa-cfg .field[hidden]{display:none}
   .tomaa-cfg .flabel{
-    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-mute);font-weight:600;
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;font-weight:600;
   }
   .tomaa-cfg .flabel .pick{
     color:var(--ink);letter-spacing:.01em;text-transform:none;font-weight:600;font-size:12.5px;margin-left:5px;
@@ -134,10 +134,11 @@
   .tomaa-cfg .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
   .tomaa-cfg .chip svg{display:block}
   .tomaa-cfg .chip .dot{
-    width:15px;height:15px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2);
+    width:10px;height:10px;border-radius:50%;flex:none;
   }
-  .tomaa-cfg .chip .dot.gold{background:radial-gradient(circle at 32% 28%,var(--gold-a),var(--gold-b) 62%,var(--gold-c))}
-  .tomaa-cfg .chip .dot.silver{background:radial-gradient(circle at 32% 28%,var(--silver-a),var(--silver-b) 62%,var(--silver-c))}
+  .tomaa-cfg .chip .dot.gold{background:#c6a052}
+  .tomaa-cfg .chip .dot.silver{background:#b9bcc1}
+  .tomaa-cfg .chip.active .dot{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)}
   .tomaa-cfg .chips.cats .chip{border-radius:999px;font-size:12.5px;padding:7px 13px;color:var(--ink-soft)}
   .tomaa-cfg .chips.cats .chip.active{color:#fff}
 
@@ -270,7 +271,7 @@
 
   <!-- 3 · ШАРМЫ (низ) -->
   <section class="panel">
-    <div class="panel-head"><span class="panel-num">3</span><h2 class="panel-title">Шармы</h2>
+    <div class="panel-head"><span class="panel-num">2</span><h2 class="panel-title">Шармы</h2>
       <span class="pick pick-charm" id="pickCharm"></span>
       <button class="clear-link" id="clearBtn" type="button" hidden>снять все</button></div>
     <div class="fields">
