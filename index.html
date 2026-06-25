@@ -73,14 +73,14 @@
     background:#ffffff;
     border:1px solid var(--line);
     border-radius:var(--radius);
-    padding:32px 30px;
+    padding:24px 30px;
     margin-bottom:16px;
     overflow:hidden;
   }
   .tomaa-cfg .stage{
     position:relative;width:100%;
     display:flex;align-items:center;justify-content:center;
-    min-height:200px;
+    min-height:130px;
   }
   .tomaa-cfg .frame{
     width:100%;overflow:hidden;display:flex;justify-content:center;align-items:center;
@@ -139,8 +139,7 @@
   .tomaa-cfg .chip .dot.gold{background:#c6a052}
   .tomaa-cfg .chip .dot.silver{background:#b9bcc1}
   .tomaa-cfg .chip.active .dot{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)}
-  .tomaa-cfg .chips.cats .chip{border-radius:999px;font-size:12.5px;padding:7px 13px;color:var(--ink-soft)}
-  .tomaa-cfg .chips.cats .chip.active{color:#fff}
+  .tomaa-cfg .chips.cats .chip{font-size:12.5px;padding:8px 13px}
 
   /* свотчи цвета основы */
   .tomaa-cfg .swatches{display:flex;flex-wrap:wrap;gap:9px}
@@ -165,39 +164,41 @@
   .tomaa-cfg .charm-btn.soon{opacity:.6}
   .tomaa-cfg .charm-btn.soon img{filter:grayscale(.25)}
 
-  .tomaa-cfg .hint{font-size:12.5px;color:var(--ink-mute);line-height:1.5;margin:13px 2px 0}
+  .tomaa-cfg .hint{font-size:12.5px;color:#777777;line-height:1.5;margin:13px 2px 0}
   .tomaa-cfg .clear-link{
     appearance:none;border:none;background:none;cursor:pointer;font:inherit;
-    font-size:12px;color:var(--ink-mute);text-decoration:underline;padding:0;
+    font-size:12px;color:var(--ink-soft);text-decoration:underline;padding:0;
   }
   .tomaa-cfg .clear-link:hover{color:var(--ink)}
   .tomaa-cfg .clear-link[hidden]{display:none}
 
-  /* summary */
+  /* summary — резюме выбора */
   .tomaa-cfg .summary{
     background:var(--panel);border:1px solid var(--line);
-    border-radius:var(--radius);padding:18px 22px;
+    border-radius:var(--radius);padding:22px 24px;max-width:540px;margin:0 auto;
   }
-  .tomaa-cfg .sum-grid{display:flex;flex-wrap:wrap;gap:6px 40px;margin-bottom:14px}
-  .tomaa-cfg .sum-row{display:flex;gap:10px;align-items:baseline;font-size:14px}
-  .tomaa-cfg .sum-row .k{color:var(--ink-soft)}
-  .tomaa-cfg .sum-row .v{font-weight:600}
-  .tomaa-cfg .sum-foot{
-    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
-    border-top:1px solid var(--line-strong);padding-top:16px;
+  .tomaa-cfg .sum-title{font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
+  .tomaa-cfg .sum-rows{display:flex;flex-direction:column}
+  .tomaa-cfg .sum-row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:20px;
+    padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;
   }
-  .tomaa-cfg .sum-total{display:flex;align-items:baseline;gap:10px}
-  .tomaa-cfg .sum-total .k{font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.1em}
-  .tomaa-cfg .sum-total .v{font-size:24px;font-weight:600}
-  .tomaa-cfg .sku{font-size:11px;color:var(--ink-mute);letter-spacing:.05em}
+  .tomaa-cfg .sum-row[hidden]{display:none}
+  .tomaa-cfg .sum-row .k{color:var(--ink-soft);flex:none}
+  .tomaa-cfg .sum-row .v{font-weight:600;text-align:right}
+  .tomaa-cfg .sum-price{border-bottom:none;padding-top:14px}
+  .tomaa-cfg .sum-price .k{align-self:center;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
+  .tomaa-cfg .sum-price .v{font-size:22px}
   .tomaa-cfg .cta{
-    cursor:pointer;border:none;border-radius:6px;
+    margin-top:18px;width:100%;cursor:pointer;border:none;border-radius:999px;
     background:var(--accent);color:#fff;font-size:15px;font-weight:600;letter-spacing:.02em;
-    padding:15px 40px;transition:.18s;font-family:inherit;
+    padding:16px;transition:.18s;font-family:inherit;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
   }
   .tomaa-cfg .cta:hover{background:#2a2a2a}
   .tomaa-cfg .cta:active{opacity:.9}
-  .tomaa-cfg .note{font-size:12px;color:var(--ink-mute);margin:12px 2px 0;line-height:1.5}
+  .tomaa-cfg .cta svg{display:block}
+  .tomaa-cfg .note{font-size:12px;color:#888888;margin:12px 2px 0;line-height:1.5;text-align:center}
 
   /* toast */
   .tomaa-cfg .toast{
@@ -216,10 +217,10 @@
   @media (max-width:480px){
     .tomaa-cfg{--zoom:240%;padding:18px 13px 36px}
     .tomaa-cfg .panel{padding:16px 15px}
+    .tomaa-cfg .chip{padding:11px 15px;font-size:13.5px}    /* крупнее под палец */
+    .tomaa-cfg .color-sw{width:36px;height:36px}
     .tomaa-cfg .charms{grid-template-columns:repeat(4,1fr)}
     .tomaa-cfg .charm-btn .c-name{font-size:10px}
-    .tomaa-cfg .sum-foot{flex-direction:column;align-items:stretch}
-    .tomaa-cfg .cta{width:100%}
   }
 </style>
 </head>
@@ -228,7 +229,6 @@
   <div class="cfg-head">
     <p class="cfg-brand">TOMAA</p>
     <h1 class="cfg-title">Соберите свой браслет</h1>
-    <p class="cfg-sub">Выберите основу, покрытие и шарм — образ соберётся вживую</p>
   </div>
 
   <!-- 1 · ОСНОВА (сверху) -->
@@ -273,7 +273,7 @@
   <section class="panel">
     <div class="panel-head"><span class="panel-num">2</span><h2 class="panel-title">Шармы</h2>
       <span class="pick pick-charm" id="pickCharm"></span>
-      <button class="clear-link" id="clearBtn" type="button" hidden>снять все</button></div>
+      <button class="clear-link" id="clearBtn" type="button" hidden>× снять все</button></div>
     <div class="fields">
       <div class="field">
         <span class="flabel">Покрытие <b class="pick" id="pickPlating"></b></span>
@@ -296,15 +296,20 @@
 
   <!-- ИТОГ -->
   <section class="summary">
-    <div class="sum-grid">
-      <div class="sum-row"><span class="k">Основа</span><span class="v" id="sumType">—</span></div>
-      <div class="sum-row"><span class="k">Шармы</span><span class="v" id="sumCharm">—</span></div>
+    <h2 class="sum-title">Итого</h2>
+    <div class="sum-rows">
+      <div class="sum-row"><span class="k">Тип</span><span class="v" id="sumType">—</span></div>
+      <div class="sum-row"><span class="k">Материал</span><span class="v" id="sumMaterial">—</span></div>
+      <div class="sum-row"><span class="k">Цвет</span><span class="v" id="sumColor">—</span></div>
+      <div class="sum-row" id="sumLevelRow" hidden><span class="k">Уровень</span><span class="v" id="sumLevel">—</span></div>
+      <div class="sum-row"><span class="k">Шармы</span><span class="v" id="sumCharm">Не выбрано</span></div>
+      <div class="sum-row sum-price"><span class="k">Цена</span><span class="v" id="sumPrice">—</span></div>
     </div>
-    <div class="sum-foot">
-      <div class="sum-total"><span class="k">Итого</span><span class="v" id="sumPrice">—</span><span class="sku" id="sumSku"></span></div>
-      <button class="cta" id="cta">Оформить заказ</button>
-    </div>
-    <p class="note" id="ctaNote">Цены предварительные — задаются в настройках конфигуратора.</p>
+    <button class="cta" id="cta">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span>Добавить в корзину</span>
+    </button>
+    <p class="note" id="ctaNote">Цены предварительные — уточняются при оформлении.</p>
   </section>
 
   <div class="toast" id="toast"></div>
@@ -755,20 +760,23 @@ const CHARMS_FULL = [
   }
 
   function renderSummary(v, multi){
-    $("sumType").textContent = v.label + " · " + colorName() + ", " + BASES[state.material].label.toLowerCase();
+    $("sumType").textContent = v.label;
+    $("sumMaterial").textContent = BASES[state.material].label;
+    $("sumColor").textContent = colorName();
+    const lvlRow = $("sumLevelRow");
+    if(multi){ lvlRow.hidden = false; $("sumLevel").textContent = v.charm.levels[state.level].label; }
+    else lvlRow.hidden = true;
     const parts = [];
     v.charm.levels.forEach(function(lv){
       const arr = state.placed[lv.id] || [];
       if(!arr.length) return;
       const names = arr.map(function(it){
-        return charmName(it.charm) + "·" + (it.plating==="gold" ? "зол." : "сер.");
+        return charmName(it.charm) + " (" + (it.plating==="gold" ? "зол." : "сер.") + ")";
       }).join(", ");
       parts.push(multi ? (lv.label + ": " + names) : names);
     });
-    $("sumCharm").innerHTML = parts.length ? parts.join("<br>") : "—";
-    const count = totalCharms();
+    $("sumCharm").innerHTML = parts.length ? parts.join("<br>") : "Не выбрано";
     $("sumPrice").textContent = fmt(v.price + charmsSum());
-    $("sumSku").textContent = "TOMAA-" + state.variant.toUpperCase() + (count ? " · " + count + " шт." : "");
   }
 
   // авто-высота при встраивании через iframe (Tilda слушает это сообщение)
