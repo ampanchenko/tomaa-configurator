@@ -260,13 +260,6 @@
         </div>
       </div>
     </div>
-    <div class="stage-foot">
-      <div>
-        <div class="stage-name" id="stageName">—</div>
-        <div class="stage-meta" id="stageMeta">—</div>
-      </div>
-      <span class="badge-tmp" id="badgeTmp" hidden>фото-образец</span>
-    </div>
   </section>
 
   <!-- 3 · ШАРМЫ (низ) -->
@@ -750,9 +743,6 @@ const CHARMS_FULL = [
     $("pickLevel").textContent = multi ? v.charm.levels[state.level].label : "";
     $("pickPlating").textContent = p.label;
     $("pickCharm").textContent = onLevel + " / " + MAX_CHARMS + (multi ? " на ремешке" : "");
-    $("stageName").textContent = total ? ("Шармов на браслете: " + total) : "Добавьте шармы из списка ниже";
-    $("stageMeta").textContent = v.label + (multi ? " · " + lvlWord : "") + " — " + v.meta;
-    $("badgeTmp").hidden = !v.placeholder;
     $("clearBtn").hidden = onLevel === 0;
 
     renderSummary(v, multi);
