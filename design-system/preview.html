@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components" -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .ds{font-family:'Montserrat',-apple-system,Arial,sans-serif;padding:24px;color:#000}
+  .lab{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;font-weight:600;margin:0 0 12px}
+  .stage-wrap{background:#fff;border:1px solid #ebebeb;border-radius:8px;padding:24px 30px;overflow:hidden}
+  .frame{width:100%;overflow:hidden;display:flex;justify-content:center;align-items:center;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+            mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
+  .box{position:relative;width:150%;margin:0 auto}
+  .box .bracelet{width:100%;display:block;filter:drop-shadow(0 14px 18px rgba(0,0,0,.16))}
+  .box .charm{position:absolute;top:48%;transform:translate(-50%,-50%);width:7.2%;height:auto}
+  .box .c1{left:46.4%}.box .c2{left:53.6%}
+</style>
+<div class="ds">
+  <p class="lab">Превью браслета с шармами (зум на центр, мягкое затухание краёв)</p>
+  <div class="stage-wrap">
+    <div class="frame">
+      <div class="box">
+        <img class="bracelet" src="https://ampanchenko.github.io/tomaa-configurator/assets/bracelets/single-10-leather-black.webp" alt="">
+        <img class="charm c1" src="https://ampanchenko.github.io/tomaa-configurator/assets/charms/gold/paw.webp" alt="">
+        <img class="charm c2" src="https://ampanchenko.github.io/tomaa-configurator/assets/charms/silver/clover.webp" alt="">
+      </div>
+    </div>
+  </div>
+</div>
