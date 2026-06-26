@@ -15,11 +15,11 @@
   --ink:#14110f; --ink-soft:#6b6560; --mute:#a8a29b;
   --line:#e7e3dd; --line-soft:#f0ece6; --panel:#f5f2ed; --bg:#fbfaf7;
   --accent:#14110f; --accent-ink:#fff;
-  --radius:18px; --radius-sm:11px;
+  --radius:12px; --radius-sm:8px;
   --font:'Montserrat',-apple-system,Arial,sans-serif;
   --display:'Montserrat',-apple-system,Arial,sans-serif; /* @kind font */
-  --gold:radial-gradient(circle at 32% 26%,#edd28f,#c2933f 58%,#8a6322); /* @kind color */
-  --silver:radial-gradient(circle at 32% 26%,#f6f7f9,#c4c7cc 58%,#8d9197); /* @kind color */
+  --gold:linear-gradient(150deg,#dcb863,#bb8f37); /* @kind color */
+  --silver:linear-gradient(150deg,#d6d9dd,#abafb5); /* @kind color */
   --stage:radial-gradient(120% 90% at 50% 16%,#ffffff 0%,#f3eee7 64%,#e8e1d7 100%); /* @kind color */
   --pad:clamp(20px,2.4vw,34px);
 }
@@ -98,15 +98,15 @@ button{font-family:inherit}
 .charm.medallion{border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 6px 7px rgba(20,17,15,.26),inset 0 0 0 2px rgba(255,255,255,.9),0 0 0 3px var(--ring,#c2933f)}
 
 .stage-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
-.plating{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px}
-.plating button{border:none;background:none;cursor:pointer;border-radius:999px;padding:8px 13px 8px 9px;font-size:12px;font-weight:600;color:var(--ink-soft);display:inline-flex;align-items:center;gap:8px;letter-spacing:.02em;transition:.16s}
-.plating button.on{background:var(--ink);color:#fff}
+.plating{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px}
+.plating button{border:none;background:none;cursor:pointer;border-radius:6px;padding:8px 13px 8px 9px;font-size:12px;font-weight:600;color:var(--ink-soft);display:inline-flex;align-items:center;gap:8px;letter-spacing:.02em;transition:.16s}
+.plating button.on{color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .plating.small button{padding:7px 11px 7px 8px;font-size:11.5px}
 .plating.small button svg{display:block}
 .plating .dot{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
 .plating.small .dot{width:13px;height:13px}
 .plating .dot.gold{background:var(--gold)}.plating .dot.silver{background:var(--silver)}
-.count-pill{font-size:11.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px}
+.count-pill{font-size:11.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;background:#fff;border:1px solid var(--line);border-radius:8px;padding:7px 13px}
 .count-pill b{color:var(--ink)}
 .stage-legend{font-size:11.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
 .stage-legend .sp{width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;flex:none}
@@ -162,8 +162,8 @@ button{font-family:inherit}
 
 /* category chips */
 .cats{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
-.cat{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:.15s;letter-spacing:.01em}
-.cat.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.cat{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:.15s;letter-spacing:.01em}
+.cat.on{background:#fff;border-color:var(--ink);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .cat:not(.on):hover{border-color:#cfc9c1;color:var(--ink)}
 
 /* charm grid */
@@ -174,7 +174,7 @@ button{font-family:inherit}
 .ccard.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .ccard.disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
 .ccard .ph{width:100%;aspect-ratio:1;border-radius:8px;background:var(--line-soft) center/cover;display:block}
-.ccard .cn{font-size:10.5px;line-height:1.25;color:var(--ink-soft);font-weight:500;text-align:center;text-wrap:balance;min-height:2.5em;display:flex;align-items:center}
+.ccard .cn{font-size:11px;line-height:1.25;color:var(--ink);font-weight:600;text-align:center;text-wrap:balance;min-height:2.5em;display:flex;align-items:center}
 .ccard .cp{font-size:11px;font-weight:600;color:var(--ink);display:flex;align-items:baseline;gap:5px;justify-content:center}
 .ccard .cp-old{font-size:9.5px;font-weight:500;color:var(--mute);text-decoration:line-through}
 .ccard .add{position:absolute;top:7px;right:7px;width:23px;height:23px;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s}
@@ -185,16 +185,16 @@ button{font-family:inherit}
 /* placed tray */
 .tray{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;min-height:4px}
 .tray-empty{font-size:12px;color:var(--mute);font-weight:500}
-.chip-charm{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 8px 4px 4px;font-size:11.5px;font-weight:600;color:var(--ink)}
+.chip-charm{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px 4px 4px;font-size:11.5px;font-weight:600;color:var(--ink)}
 .chip-charm img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--line-soft)}
 .chip-name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.chip-fin{display:inline-flex;background:var(--panel);border-radius:999px;padding:2px;gap:1px}
+.chip-fin{display:inline-flex;background:var(--panel);border-radius:6px;padding:2px;gap:1px}
 .fdot{width:18px;height:18px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);transition:.14s}
 .fdot.gold{background:var(--gold)}.fdot.silver{background:var(--silver)}
 .fdot.on{border-color:var(--ink)}
 .fdot:not(.on){opacity:.5}
 .fdot:not(.on):hover{opacity:.85}
-.chip-lvl{display:inline-flex;background:var(--panel);border-radius:999px;padding:2px;gap:1px}
+.chip-lvl{display:inline-flex;background:var(--panel);border-radius:6px;padding:2px;gap:1px}
 .ldot{width:20px;height:20px;border-radius:50%;border:none;background:none;cursor:pointer;padding:0;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;transition:.14s}
 .ldot.on{background:var(--ink);color:#fff}
 .ldot:not(.on):hover{color:var(--ink)}
@@ -210,7 +210,7 @@ button{font-family:inherit}
 .bb-price-wrap{display:flex;flex-direction:column;align-items:flex-end;line-height:1;gap:3px}
 .bb-price-lab{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:600}
 .bb-price{font-family:var(--display);font-size:23px;font-weight:600;color:var(--ink)}
-.cta{border:none;border-radius:999px;background:var(--accent);color:var(--accent-ink);cursor:pointer;
+.cta{border:none;border-radius:8px;background:var(--accent);color:var(--accent-ink);cursor:pointer;
   font-size:14px;font-weight:600;letter-spacing:.02em;padding:15px 26px;display:inline-flex;align-items:center;gap:9px;transition:.16s;white-space:nowrap}
 .cta:hover{transform:translateY(-1px);box-shadow:0 14px 26px -14px rgba(20,17,15,.6)}
 .cta svg{display:block}
@@ -255,46 +255,32 @@ button{font-family:inherit}
   .geoms{grid-template-columns:1fr 1fr}
 }
 
-/* ===== Production embed overrides (auto-height / grow mode) =====
-   The widget renders at natural height; the host page (browser window or
-   Tilda parent) does the scrolling. So the shell must be flat and free of
-   any overflow:hidden ancestor — otherwise the sticky preview / CTA can't
-   pin. Loaded AFTER styles.css so these rules win. */
+/* ===== Production embed overrides (fixed single-screen app) =====
+   Desktop & mobile: the whole configurator fits ONE screen. The left preview
+   and the bottom «В корзину» bar stay fixed; only the options panel scrolls
+   internally. The host iframe is a fixed height (no auto-grow).
+   Loaded AFTER styles.css so these rules win. */
 
+html, body { height: 100%; }
 body { background: #fff; margin: 0; }
-.embed { max-width: 1180px; margin: 0 auto; padding: 20px; }
+#root { height: 100%; }
 
-.device { transition: none; }
-.device.wide { max-width: 1120px; margin: 0 auto; }
+.embed { height: 100%; }
+.device { transition: none; height: 100%; }
+.device.wide { max-width: 1180px; margin: 0 auto; }
 
-/* flat shell — no bezel, and crucially overflow:visible so the page scroll
-   (not a clipped inner box) drives position:sticky */
-.app { border: none; border-radius: 0; box-shadow: none; overflow: visible; }
-
-/* no internal panel scroll — content flows at natural height */
-.panel { max-height: none; }
+/* flat shell that fills the viewport; internal scroll, no page scroll */
+.app { height: 100%; min-height: 520px; border: none; border-radius: 0; box-shadow: none; overflow: hidden; }
+.app-body { flex: 1; min-height: 0; }
 .notch { display: none !important; }
 .bb-price { white-space: nowrap; }
 
-/* wide: bracelet preview is a compact, self-contained card that sticks beside
-   the scrolling options — no full-height beige field, no dead white gap */
-.device.wide .app-body { align-items: flex-start; }
-.device.wide .stage {
-  position: sticky; top: 20px;
-  align-self: flex-start;
-  flex: 0 0 42%;
-  height: auto; min-height: 0;
-  margin: 20px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: 0 22px 44px -32px rgba(20,17,15,.45);
-}
-.device.wide .stage-eyebrow { margin-bottom: 14px; }
-.device.wide .stage-figure { flex: 0 0 auto; min-height: 240px; padding: 20px 0; }
-.device.wide .stage-foot { margin-top: 16px; }
+/* wide: left stage fixed full-height, ONLY the options panel scrolls */
+.device.wide .stage { flex: 0 0 44%; }
+.panel { min-height: 0; max-height: none; overflow-y: auto; }
 
-/* keep price + «В корзину» reachable as a floating bar during scroll */
-.bottombar { box-shadow: 0 -12px 26px -20px rgba(20,17,15,.5); }
+/* bottom bar pinned at the foot of the fixed column, always visible */
+.bottombar { position: static; box-shadow: 0 -14px 28px -22px rgba(20,17,15,.22); }
 
 /* compact (narrow iframe): stack stage over panel, no phone frame */
 .device.compact { max-width: 560px; margin: 0 auto; }
@@ -873,20 +859,8 @@ function Embed() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Embed />);
 
-// ---- auto-height for Tilda iframe embed (matches tilda-embed.html) ----
-(function () {
-  let lastH = 0;
-  function postHeight() {
-    const hh = Math.ceil(document.documentElement.scrollHeight);
-    if (hh && hh !== lastH) { lastH = hh; try { parent.postMessage({ tomaaConfiguratorHeight: hh }, '*'); } catch (e) {} }
-  }
-  const root = document.getElementById('root');
-  if (window.ResizeObserver) { new ResizeObserver(postHeight).observe(root); }
-  window.addEventListener('load', postHeight);
-  window.addEventListener('resize', postHeight);
-  setTimeout(postHeight, 400);
-  setInterval(postHeight, 1500);
-})();
+// Fixed single-screen app: the iframe is a fixed height (see tilda-embed.html),
+// so there is no auto-grow — the options panel scrolls internally instead.
 </script>
 </body>
 </html>
