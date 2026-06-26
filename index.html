@@ -1,863 +1,867 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TOMAA — Конфигуратор браслета</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Конфигуратор браслетов TOMAA</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
-  :root{
-    --bg:#ffffff;
-    --panel:#f7f7f7;
-    --line:#ebebeb;
-    --line-strong:#dcdcdc;
-    --ink:#000000;
-    --ink-soft:#565656;
-    --ink-mute:#b6b6b6;
-    --gold-a:#e7c578; --gold-b:#b8893f; --gold-c:#8a6322;
-    --silver-a:#f2f3f5; --silver-b:#c4c7cc; --silver-c:#8d9197;
-    --accent:#000000;
-    --radius:8px;
-    --radius-sm:5px;
-    --shadow:none;
-    --font:'Montserrat',-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
-    --zoom:150%;
-  }
-  *{box-sizing:border-box}
-  .tomaa-cfg{
-    font-family:var(--font);
-    color:var(--ink);
-    max-width:1180px;
-    margin:0 auto;
-    padding:28px 20px 48px;
-    -webkit-font-smoothing:antialiased;
-  }
-  .tomaa-cfg .cfg-head{text-align:center;margin-bottom:26px}
-  .tomaa-cfg .cfg-brand{
-    font-size:13px;letter-spacing:.42em;text-transform:uppercase;
-    color:var(--ink-soft);font-weight:600;margin:0 0 8px;padding-left:.42em;
-  }
-  .tomaa-cfg .cfg-title{
-    font-size:clamp(20px,3vw,28px);font-weight:600;letter-spacing:.08em;
-    text-transform:uppercase;margin:0;
-  }
-  .tomaa-cfg .cfg-sub{color:var(--ink-soft);font-size:14px;font-weight:400;margin:10px 0 0}
+/* ===== TOMAA configurator — redesign audit ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600&display=swap');
 
-  /* ---- секции-панели ---- */
-  .tomaa-cfg .panel{
-    background:#fff;border:1px solid var(--line);border-radius:var(--radius);
-    padding:20px 22px;margin-bottom:16px;
-  }
-  .tomaa-cfg .panel-head{display:flex;align-items:center;gap:10px;margin:0}
-  .tomaa-cfg .panel > * + *{margin-top:18px}   /* единый вертикальный ритм внутри панели */
-  .tomaa-cfg .panel-num{
-    width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;
-    font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none;
-  }
-  .tomaa-cfg .panel-title{font-size:15px;font-weight:600;margin:0;letter-spacing:.02em;text-transform:uppercase}
-  .tomaa-cfg .pick-charm{font-size:13px;color:var(--ink-soft);font-weight:500}
-  .tomaa-cfg .panel-head .clear-link{margin-left:auto}
-  .tomaa-cfg .fields{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-start}
-  .tomaa-cfg .field{display:flex;flex-direction:column;gap:10px}
-  .tomaa-cfg .fields .field{margin-top:0}   /* поля внутри ряда не наследуют вертикальный ритм */
-  .tomaa-cfg .field[hidden]{display:none}
-  .tomaa-cfg .flabel{
-    font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8a8a8a;font-weight:600;
-  }
-  .tomaa-cfg .flabel .pick{
-    color:var(--ink);letter-spacing:.01em;text-transform:none;font-weight:600;font-size:12.5px;margin-left:5px;
-  }
+:root{
+  --ink:#14110f; --ink-soft:#6b6560; --mute:#a8a29b;
+  --line:#e7e3dd; --line-soft:#f0ece6; --panel:#f5f2ed; --bg:#fbfaf7;
+  --accent:#14110f; --accent-ink:#fff;
+  --radius:18px; --radius-sm:11px;
+  --font:'Montserrat',-apple-system,Arial,sans-serif;
+  --display:'Montserrat',-apple-system,Arial,sans-serif; /* @kind font */
+  --gold:radial-gradient(circle at 32% 26%,#edd28f,#c2933f 58%,#8a6322); /* @kind color */
+  --silver:radial-gradient(circle at 32% 26%,#f6f7f9,#c4c7cc 58%,#8d9197); /* @kind color */
+  --stage:radial-gradient(120% 90% at 50% 16%,#ffffff 0%,#f3eee7 64%,#e8e1d7 100%); /* @kind color */
+  --pad:clamp(20px,2.4vw,34px);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:var(--font); color:var(--ink); background:var(--bg);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+button{font-family:inherit}
 
-  /* ---- Stage / preview ---- */
-  .tomaa-cfg .stage-wrap{
-    background:#ffffff;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:24px 30px;
-    margin-bottom:16px;
-    overflow:hidden;
-  }
-  .tomaa-cfg .stage{
-    position:relative;width:100%;
-    display:flex;align-items:center;justify-content:center;
-    min-height:130px;
-  }
-  .tomaa-cfg .frame{
-    width:100%;overflow:hidden;display:flex;justify-content:center;align-items:center;
-    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
-            mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
-  }
-  .tomaa-cfg .bracelet-box{
-    position:relative;width:var(--zoom,100%);flex:none;margin:0 auto;
-  }
-  .tomaa-cfg .bracelet{
-    width:100%;display:block;filter:drop-shadow(0 14px 18px rgba(0,0,0,.16));
-  }
-  .tomaa-cfg .charms-layer{position:absolute;inset:0;pointer-events:none}
-  .tomaa-cfg .charm-on{
-    position:absolute;
-    transform:translate(-50%,-50%);
-    height:auto;
-    cursor:grab;pointer-events:auto;
-    touch-action:none;user-select:none;-webkit-user-select:none;-webkit-user-drag:none;
-    transition:transform .12s ease, filter .12s ease;
-    animation:charmIn .22s ease;
-  }
-  .tomaa-cfg .charm-on:active{cursor:grabbing}
-  .tomaa-cfg .charm-on:hover{
-    filter:brightness(1.07);
-    transform:translate(-50%,-50%) scale(1.07);
-  }
-  @keyframes charmIn{from{opacity:0;transform:translate(-50%,-62%)}to{opacity:1;transform:translate(-50%,-50%)}}
-  .tomaa-cfg .stage-foot{
-    display:flex;justify-content:space-between;align-items:center;gap:12px;
-    margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
-  }
-  .tomaa-cfg .stage-name{font-size:15px;font-weight:600}
-  .tomaa-cfg .stage-meta{font-size:13px;color:var(--ink-soft);margin-top:2px;font-weight:400}
-  .tomaa-cfg .badge-tmp{
-    font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);
-    background:var(--panel);border:1px solid var(--line-strong);border-radius:999px;
-    padding:5px 11px;white-space:nowrap;
-  }
-  .tomaa-cfg .badge-tmp[hidden]{display:none}
+/* ---------- audit chrome ---------- */
+.audit-top{
+  max-width:1140px; margin:0 auto; padding:30px var(--pad) 6px;
+  display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
+.audit-kicker{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0 0 9px}
+.audit-h1{font-family:var(--display);font-size:clamp(24px,3.1vw,34px);font-weight:600;letter-spacing:.01em;margin:0;line-height:1.08}
+.audit-sub{font-size:14px;color:var(--ink-soft);margin:11px 0 0;max-width:540px;line-height:1.55}
+.audit-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 
-  /* ---- ЕДИНЫЕ ЧИПЫ ВЫБОРА ---- */
-  .tomaa-cfg .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .tomaa-cfg .chip{
-    appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
-    background:#fff;border:1px solid var(--line-strong);border-radius:8px;
-    padding:9px 14px;font:inherit;font-size:13px;font-weight:500;color:var(--ink);
-    transition:.15s;line-height:1;white-space:nowrap;
-  }
-  .tomaa-cfg .chip:hover{border-color:#999999}
-  .tomaa-cfg .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-  .tomaa-cfg .chip svg{display:block}
-  .tomaa-cfg .chip .dot{
-    width:10px;height:10px;border-radius:50%;flex:none;
-  }
-  .tomaa-cfg .chip .dot.gold{background:#c6a052}
-  .tomaa-cfg .chip .dot.silver{background:#b9bcc1}
-  .tomaa-cfg .chip.active .dot{box-shadow:0 0 0 1.5px rgba(255,255,255,.25)}
-  .tomaa-cfg .chips.cats .chip{font-size:12.5px;padding:8px 13px}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px}
+.seg button{border:none;background:none;cursor:pointer;border-radius:999px;padding:9px 15px;font-size:12.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px;transition:.16s}
+.seg button.on{background:var(--ink);color:#fff}
+.seg button:not(.on):hover{color:var(--ink)}
+.seg svg{display:block}
 
-  /* свотчи цвета основы */
-  .tomaa-cfg .swatches{display:flex;flex-wrap:wrap;gap:9px}
-  .tomaa-cfg .color-sw{
-    width:30px;height:30px;border-radius:50%;cursor:pointer;appearance:none;padding:0;
-    border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);transition:.15s;
-  }
-  .tomaa-cfg .color-sw:hover{transform:scale(1.09)}
-  .tomaa-cfg .color-sw.active{border-color:var(--accent)}
+.toggle-ann{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 12px;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.toggle-ann .sw{width:34px;height:19px;border-radius:999px;background:#d8d3cc;position:relative;transition:.18s;flex:none}
+.toggle-ann.on .sw{background:var(--ink)}
+.toggle-ann .sw::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:.18s}
+.toggle-ann.on .sw::after{left:17px}
 
-  /* палитра шармов */
-  .tomaa-cfg .charms{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
-  .tomaa-cfg .charm-btn{
-    appearance:none;cursor:pointer;background:#fff;border:1px solid var(--line);
-    border-radius:8px;padding:8px 6px 7px;transition:.18s;color:var(--ink);
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-  }
-  .tomaa-cfg .charm-btn:hover{border-color:#999999}
-  .tomaa-cfg .charm-btn.active{border-color:var(--accent);box-shadow:0 0 0 1.5px var(--accent) inset}
-  .tomaa-cfg .charm-btn img{width:100%;aspect-ratio:1;object-fit:contain;display:block}
-  .tomaa-cfg .charm-btn .c-name{
-    font-size:11px;color:var(--ink-soft);font-weight:500;text-align:center;line-height:1.25;
-    min-height:2.5em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-  }
-  .tomaa-cfg .charm-btn.soon{opacity:.6}
-  .tomaa-cfg .charm-btn.soon img{filter:grayscale(.25)}
+/* ---------- frame / device ---------- */
+.stagewrap{max-width:1140px;margin:18px auto 60px;padding:0 var(--pad);position:relative}
+.device{position:relative;transition:max-width .35s cubic-bezier(.4,0,.2,1)}
+.device.desktop{max-width:1080px;margin:0 auto}
+.device.mobile{max-width:430px;margin:0 auto;background:#0d0b0a;border-radius:50px;padding:12px;box-shadow:0 36px 80px -34px rgba(20,17,15,.65)}
+.device.mobile .app{border-radius:38px;border-color:transparent;box-shadow:none;height:clamp(600px,84vh,860px);overflow:hidden}
+.notch{display:none}
+.device.mobile .notch{display:flex;height:24px;align-items:center;justify-content:center}
+.device.mobile .notch::before{content:"";width:116px;height:7px;border-radius:99px;background:#2a2624}
 
-  .tomaa-cfg .hint{font-size:12.5px;color:#777777;line-height:1.5;margin:0 2px}
-  .tomaa-cfg .clear-link{
-    appearance:none;border:none;background:none;cursor:pointer;font:inherit;
-    font-size:12px;color:var(--ink-soft);text-decoration:underline;padding:0;
-  }
-  .tomaa-cfg .clear-link:hover{color:var(--ink)}
-  .tomaa-cfg .clear-link[hidden]{display:none}
+/* ---------- the app shell ---------- */
+.app{
+  background:#fff;border:1px solid var(--line);border-radius:calc(var(--radius) + 4px);
+  box-shadow:0 1px 0 rgba(0,0,0,.02),0 30px 60px -38px rgba(20,17,15,.4);
+  overflow:hidden;display:flex;flex-direction:column;position:relative;
+}
+.app-body{display:flex;align-items:stretch}
+.device.mobile .app-body{flex-direction:column;flex:1;min-height:0;overflow:hidden}
 
-  /* summary — резюме выбора */
-  .tomaa-cfg .summary{
-    background:var(--panel);border:1px solid var(--line);
-    border-radius:var(--radius);padding:22px 24px;max-width:540px;margin:0 auto;
-  }
-  .tomaa-cfg .sum-title{font-size:15px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin:0 0 8px}
-  .tomaa-cfg .sum-rows{display:flex;flex-direction:column}
-  .tomaa-cfg .sum-row{
-    display:flex;justify-content:space-between;align-items:baseline;gap:20px;
-    padding:11px 0;border-bottom:1px solid var(--line);font-size:14px;
-  }
-  .tomaa-cfg .sum-row[hidden]{display:none}
-  .tomaa-cfg .sum-row .k{color:var(--ink-soft);flex:none}
-  .tomaa-cfg .sum-row .v{font-weight:600;text-align:right}
-  .tomaa-cfg .sum-price{border-bottom:none;padding-top:14px}
-  .tomaa-cfg .sum-price .k{align-self:center;text-transform:uppercase;letter-spacing:.08em;font-size:12px}
-  .tomaa-cfg .sum-price .v{font-size:22px}
-  .tomaa-cfg .cta{
-    margin-top:18px;width:100%;cursor:pointer;border:none;border-radius:999px;
-    background:var(--accent);color:#fff;font-size:15px;font-weight:600;letter-spacing:.02em;
-    padding:16px;transition:.18s;font-family:inherit;
-    display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  }
-  .tomaa-cfg .cta:hover{background:#2a2a2a}
-  .tomaa-cfg .cta:active{opacity:.9}
-  .tomaa-cfg .cta svg{display:block}
-  .tomaa-cfg .note{font-size:12px;color:#888888;margin:12px 2px 0;line-height:1.5;text-align:center}
+/* ---------- stage ---------- */
+.stage{
+  position:relative;flex:0 0 47%;background:var(--stage);
+  padding:26px 30px 22px;display:flex;flex-direction:column;
+  border-right:1px solid var(--line-soft);
+}
+.device.mobile .stage{flex:none;border-right:none;border-bottom:1px solid var(--line-soft);position:static;z-index:6;padding:18px 18px 14px}
+.stage-eyebrow{font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0 0 auto}
+.stage-figure{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:8px 0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.device.mobile .stage-figure{padding:14px 0;min-height:78px}
+.bracelet-box{position:relative;width:150%;max-width:none}
+.device.mobile .bracelet-box{width:128%;margin:0 auto}
+.bracelet-img{width:100%;display:block;filter:drop-shadow(0 18px 22px rgba(20,17,15,.18))}
+.bracelet-reflect{position:absolute;left:0;right:0;top:99%;width:100%;height:auto;opacity:.13;transform:scaleY(-1);transform-origin:top;
+  -webkit-mask-image:linear-gradient(#000,transparent 62%);mask-image:linear-gradient(#000,transparent 62%);pointer-events:none;display:block}
+.charm{position:absolute;top:46.5%;transform:translate(-50%,-50%) scale(.4);height:auto;
+  filter:drop-shadow(0 6px 7px rgba(20,17,15,.28));opacity:0;animation:charmIn .42s cubic-bezier(.34,1.4,.5,1) forwards;
+  transition:left .2s cubic-bezier(.4,0,.2,1),top .2s cubic-bezier(.4,0,.2,1);
+  cursor:grab;touch-action:none;user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent}
+.charm:hover{filter:drop-shadow(0 8px 10px rgba(20,17,15,.34))}
+.charm.dragging{cursor:grabbing;z-index:6;animation:none;opacity:1;transform:translate(-50%,-50%) scale(1.06);filter:drop-shadow(0 12px 16px rgba(20,17,15,.42));transition:none}
+@keyframes charmIn{to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.charm.medallion{border-radius:50%;object-fit:cover;background:#fff;box-shadow:0 6px 7px rgba(20,17,15,.26),inset 0 0 0 2px rgba(255,255,255,.9),0 0 0 3px var(--ring,#c2933f)}
 
-  /* toast */
-  .tomaa-cfg .toast{
-    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
-    background:#000;color:#fff;padding:14px 20px;border-radius:6px;font-size:14px;
-    box-shadow:0 16px 40px -12px rgba(0,0,0,.5);opacity:0;pointer-events:none;
-    transition:.3s;max-width:90vw;z-index:50;
-  }
-  .tomaa-cfg .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.stage-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.plating{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px}
+.plating button{border:none;background:none;cursor:pointer;border-radius:999px;padding:8px 13px 8px 9px;font-size:12px;font-weight:600;color:var(--ink-soft);display:inline-flex;align-items:center;gap:8px;letter-spacing:.02em;transition:.16s}
+.plating button.on{background:var(--ink);color:#fff}
+.plating.small button{padding:7px 11px 7px 8px;font-size:11.5px}
+.plating.small button svg{display:block}
+.plating .dot{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.plating.small .dot{width:13px;height:13px}
+.plating .dot.gold{background:var(--gold)}.plating .dot.silver{background:var(--silver)}
+.count-pill{font-size:11.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.04em;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px}
+.count-pill b{color:var(--ink)}
+.stage-legend{font-size:11.5px;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
+.stage-legend .sp{width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.device.mobile .stage-legend{font-size:11px}
 
-  @media (max-width:760px){
-    .tomaa-cfg{--zoom:170%}
-    .tomaa-cfg .charms{grid-template-columns:repeat(5,1fr)}
-    .tomaa-cfg .fields{gap:16px 22px}
-  }
-  @media (max-width:480px){
-    .tomaa-cfg{--zoom:240%;padding:18px 13px 36px}
-    .tomaa-cfg .panel{padding:16px 15px}
-    .tomaa-cfg .chip{padding:11px 15px;font-size:13.5px}    /* крупнее под палец */
-    .tomaa-cfg .color-sw{width:36px;height:36px}
-    .tomaa-cfg .charms{grid-template-columns:repeat(4,1fr)}
-    .tomaa-cfg .charm-btn .c-name{font-size:10px}
-  }
+/* ---------- panel ---------- */
+.panel{flex:1;min-width:0;display:flex;flex-direction:column;max-height:640px;overflow-y:auto;scrollbar-width:thin}
+.device.mobile .panel{max-height:none;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.panel::-webkit-scrollbar{width:8px}.panel::-webkit-scrollbar-thumb{background:#e3ded7;border-radius:99px}
+.step{padding:24px var(--pad) 6px;border-bottom:1px solid var(--line-soft)}
+.step:last-of-type{border-bottom:none}
+.step-head{display:flex;align-items:baseline;gap:11px;margin:0 0 16px;padding-right:30px}
+.step-no{font-family:var(--display);font-size:13px;font-weight:600;color:var(--ink);background:var(--panel);border-radius:7px;padding:3px 8px;letter-spacing:.04em}
+.step-title{font-size:13px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin:0}
+.step-hint{font-size:12px;color:var(--mute);margin-left:auto;font-weight:500;white-space:nowrap}
+
+.field{margin-bottom:20px}
+.field-lab{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.field-lab .val{color:var(--ink);letter-spacing:.02em;text-transform:none;font-size:12.5px;font-weight:600}
+
+/* material segmented */
+.matseg{display:flex;gap:8px}
+.matseg button{flex:1;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm);padding:12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-soft);transition:.16s}
+.matseg button.on{border-color:var(--ink);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.matseg button:not(.on):hover{border-color:#cfc9c1}
+
+/* geometry cards */
+.geoms{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.geom{position:relative;width:100%;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm);padding:13px 14px;cursor:pointer;text-align:left;transition:.16s;display:flex;flex-direction:column;gap:4px;justify-content:flex-start}
+.geom:hover{border-color:#cfc9c1}
+.geom.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.geom.soon{cursor:not-allowed;opacity:.62}
+.geom .gi{display:flex;align-items:center;gap:9px;color:var(--ink)}
+.geom .gi svg{display:block}
+.geom .gl{font-size:13.5px;font-weight:600;line-height:1.25;padding-right:22px;text-wrap:pretty}
+.geom .gsz{font-weight:500;color:var(--ink-soft);letter-spacing:.04em;white-space:nowrap;margin-left:5px}
+.geom .gp{font-size:13px;font-weight:600;color:var(--ink);margin-top:auto;padding-top:6px}
+.geom .badge{position:absolute;top:10px;right:10px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--mute);border-radius:99px;padding:3px 7px}
+.geom .check{position:absolute;top:11px;right:11px;width:18px;height:18px;border-radius:50%;background:var(--ink);color:#fff;display:none;align-items:center;justify-content:center}
+.geom.on .check{display:flex}
+
+/* swatches */
+.sws{display:flex;flex-wrap:wrap;gap:11px}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid transparent;cursor:pointer;position:relative;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);transition:.14s;padding:0;background-clip:padding-box}
+.sw:hover{transform:translateY(-1px)}
+.sw.on{border-color:var(--ink)}
+.sw.on::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid var(--line)}
+
+/* finish selector for charm being added */
+.finrow{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel);border-radius:var(--radius-sm);padding:11px 13px;margin-bottom:16px;flex-wrap:wrap}
+.finrow-lab{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px}
+.finrow-hint{font-size:11.5px;color:var(--ink-soft);line-height:1.4;max-width:230px}
+
+/* category chips */
+.cats{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.cat{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:.15s;letter-spacing:.01em}
+.cat.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.cat:not(.on):hover{border-color:#cfc9c1;color:var(--ink)}
+
+/* charm grid */
+.charms{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.device.mobile .charms{grid-template-columns:repeat(3,1fr)}
+.ccard{position:relative;border:1px solid var(--line);background:#fff;border-radius:var(--radius-sm);padding:8px 8px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.15s}
+.ccard:hover{border-color:#cfc9c1;transform:translateY(-1px);box-shadow:0 10px 20px -14px rgba(20,17,15,.4)}
+.ccard.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.ccard.disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+.ccard .ph{width:100%;aspect-ratio:1;border-radius:8px;background:var(--line-soft) center/cover;display:block}
+.ccard .cn{font-size:10.5px;line-height:1.25;color:var(--ink-soft);font-weight:500;text-align:center;text-wrap:balance;min-height:2.5em;display:flex;align-items:center}
+.ccard .cp{font-size:11px;font-weight:600;color:var(--ink);display:flex;align-items:baseline;gap:5px;justify-content:center}
+.ccard .cp-old{font-size:9.5px;font-weight:500;color:var(--mute);text-decoration:line-through}
+.ccard .add{position:absolute;top:7px;right:7px;width:23px;height:23px;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;transition:.15s}
+.ccard.on .add{background:var(--ink);border-color:var(--ink);color:#fff}
+.ccard .cut{position:absolute;top:7px;left:7px;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center}
+.ccard .cut svg{display:block}
+
+/* placed tray */
+.tray{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;min-height:4px}
+.tray-empty{font-size:12px;color:var(--mute);font-weight:500}
+.chip-charm{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 8px 4px 4px;font-size:11.5px;font-weight:600;color:var(--ink)}
+.chip-charm img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--line-soft)}
+.chip-name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip-fin{display:inline-flex;background:var(--panel);border-radius:999px;padding:2px;gap:1px}
+.fdot{width:18px;height:18px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.16);transition:.14s}
+.fdot.gold{background:var(--gold)}.fdot.silver{background:var(--silver)}
+.fdot.on{border-color:var(--ink)}
+.fdot:not(.on){opacity:.5}
+.fdot:not(.on):hover{opacity:.85}
+.chip-lvl{display:inline-flex;background:var(--panel);border-radius:999px;padding:2px;gap:1px}
+.ldot{width:20px;height:20px;border-radius:50%;border:none;background:none;cursor:pointer;padding:0;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;transition:.14s}
+.ldot.on{background:var(--ink);color:#fff}
+.ldot:not(.on):hover{color:var(--ink)}
+.chip-charm .rm{border:none;background:none;cursor:pointer;color:var(--mute);width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex:none}
+.chip-charm .rm:hover{background:var(--panel);color:var(--ink)}
+
+/* ---------- bottom bar ---------- */
+.bottombar{display:flex;align-items:center;gap:18px;padding:15px var(--pad);background:#fff;border-top:1px solid var(--line);position:sticky;bottom:0;z-index:7}
+.device.mobile .bottombar{padding:13px 18px;box-shadow:0 -10px 24px -18px rgba(20,17,15,.5)}
+.bb-summary{flex:1;min-width:0}
+.bb-line{font-size:12px;color:var(--ink-soft);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bb-line b{color:var(--ink);font-weight:600}
+.bb-price-wrap{display:flex;flex-direction:column;align-items:flex-end;line-height:1;gap:3px}
+.bb-price-lab{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.bb-price{font-family:var(--display);font-size:23px;font-weight:600;color:var(--ink)}
+.cta{border:none;border-radius:999px;background:var(--accent);color:var(--accent-ink);cursor:pointer;
+  font-size:14px;font-weight:600;letter-spacing:.02em;padding:15px 26px;display:inline-flex;align-items:center;gap:9px;transition:.16s;white-space:nowrap}
+.cta:hover{transform:translateY(-1px);box-shadow:0 14px 26px -14px rgba(20,17,15,.6)}
+.cta svg{display:block}
+.device.mobile .bb-summary{display:none}
+.device.mobile .cta{flex:1;justify-content:center}
+
+/* focus visibility (a11y) */
+.app :focus-visible,.audit-controls :focus-visible{outline:2.5px solid #2f6dd0;outline-offset:2px;border-radius:8px}
+
+/* ---------- annotations ---------- */
+.pin{position:absolute;z-index:20;width:25px;height:25px;border-radius:50%;background:var(--ink);color:#fff;border:2px solid #fff;
+  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 4px 12px -3px rgba(20,17,15,.6);transition:.16s;animation:pinPop .3s ease}
+@keyframes pinPop{from{transform:scale(0)}to{transform:scale(1)}}
+.pin:hover,.pin.active{background:#2f6dd0;transform:scale(1.12)}
+.pin::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1.5px solid var(--ink);opacity:.25}
+.pin.active::after{border-color:#2f6dd0;opacity:.5}
+
+.ann-panel{position:absolute;z-index:30;width:288px;background:var(--ink);color:#fff;border-radius:14px;padding:16px 17px 17px;
+  box-shadow:0 24px 50px -18px rgba(20,17,15,.7);animation:pinPop .2s ease}
+.ann-panel .an-no{font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#b9b09f;font-weight:600;margin:0 0 7px;display:flex;justify-content:space-between}
+.ann-panel .an-no .scope{color:#8fb4f2}
+.ann-panel h4{font-size:14px;font-weight:600;margin:0 0 7px;line-height:1.25}
+.ann-panel .was{font-size:11.5px;color:#cdbfa6;line-height:1.5;margin:0 0 8px;padding-left:11px;border-left:2px solid #4a4039}
+.ann-panel p{font-size:12.5px;color:#ece6db;line-height:1.55;margin:0}
+.ann-panel .x{position:absolute;top:11px;right:11px;background:rgba(255,255,255,.1);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:13px;line-height:1}
+
+/* principles legend */
+.legend{max-width:1080px;margin:26px auto 0;padding:0 var(--pad)}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.lg-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 17px}
+.lg-card .lh{display:flex;align-items:center;gap:9px;margin:0 0 8px}
+.lg-card .ic{width:30px;height:30px;border-radius:8px;background:var(--panel);display:flex;align-items:center;justify-content:center;flex:none}
+.lg-card h5{font-size:12.5px;font-weight:600;margin:0;letter-spacing:.02em}
+.lg-card p{font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0}
+.legend-title{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:600;margin:0}
+
+.ann-hide .pin{display:none}
+
+@media (max-width:560px){
+  .audit-top{flex-direction:column;align-items:flex-start}
+  .geoms{grid-template-columns:1fr 1fr}
+}
+
+/* ===== Production embed overrides (auto-height / grow mode) =====
+   The widget renders at natural height inside a Tilda iframe; the page
+   posts its height to the parent so the iframe grows to fit (no inner
+   scroll). Loaded AFTER styles.css so these rules win. */
+
+body { background: #fff; margin: 0; }
+.embed { max-width: 1180px; margin: 0 auto; padding: 20px; }
+
+.device { transition: none; }
+.device.wide { max-width: 1120px; margin: 0 auto; }
+.device.wide .stage { min-height: 440px; }
+
+/* no internal panel scroll — let the iframe grow to content */
+.panel { max-height: none; }
+.notch { display: none !important; }
+.bb-price { white-space: nowrap; }
+
+/* compact (narrow iframe): stack stage over panel, no phone frame */
+.device.compact { max-width: 560px; margin: 0 auto; }
+.device.compact .app-body { flex-direction: column; }
+.device.compact .stage { flex: none; border-right: none; border-bottom: 1px solid var(--line-soft); padding: 18px 18px 14px; min-height: 0; }
+.device.compact .stage-figure { padding: 14px 0; min-height: 120px; }
+.device.compact .bracelet-box { width: 128%; margin: 0 auto; }
+.device.compact .stage-legend { font-size: 11px; }
+.device.compact .bb-summary { display: none; }
+.device.compact .cta { flex: 1; justify-content: center; }
+.device.compact .bottombar { padding: 13px 18px; box-shadow: 0 -10px 24px -18px rgba(20,17,15,.5); }
+
 </style>
 </head>
 <body>
-<div class="tomaa-cfg" id="tomaaCfg">
-  <div class="cfg-head">
-    <p class="cfg-brand">TOMAA</p>
-    <h1 class="cfg-title">Соберите свой браслет</h1>
-  </div>
-
-  <!-- 1 · ОСНОВА (сверху) -->
-  <section class="panel">
-    <div class="panel-head"><span class="panel-num">1</span><h2 class="panel-title">Основа</h2></div>
-    <div class="fields">
-      <div class="field">
-        <span class="flabel">Тип <b class="pick" id="pickType"></b></span>
-        <div class="chips" id="types"></div>
-      </div>
-      <div class="field">
-        <span class="flabel">Материал <b class="pick" id="pickMaterial"></b></span>
-        <div class="chips" id="materials"></div>
-      </div>
-      <div class="field">
-        <span class="flabel">Цвет <b class="pick" id="pickColor"></b></span>
-        <div class="swatches" id="colors"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 2 · ПРЕВЬЮ (центр) -->
-  <section class="stage-wrap">
-    <div class="stage" id="stage">
-      <div class="frame">
-        <div class="bracelet-box" id="braceletBox">
-          <img class="bracelet" id="braceletImg" alt="Браслет TOMAA">
-          <div class="charms-layer" id="charmsLayer"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3 · ШАРМЫ (низ) -->
-  <section class="panel">
-    <div class="panel-head"><span class="panel-num">2</span><h2 class="panel-title">Шармы</h2>
-      <span class="pick pick-charm" id="pickCharm"></span>
-      <button class="clear-link" id="clearBtn" type="button" hidden>× снять все</button></div>
-    <div class="fields">
-      <div class="field">
-        <span class="flabel">Покрытие <b class="pick" id="pickPlating"></b></span>
-        <div class="chips" id="platings"></div>
-      </div>
-      <div class="field" id="levelField" hidden>
-        <span class="flabel">Уровень <b class="pick" id="pickLevel"></b></span>
-        <div class="chips" id="levels"></div>
-      </div>
-    </div>
-    <div class="field">
-      <span class="flabel">Категория</span>
-      <div class="chips cats" id="charmCats"></div>
-    </div>
-    <div class="charms" id="charms"></div>
-    <p class="hint">Нажмите на шарм, чтобы надеть его на браслет (до 5 в ряд). Покрытие
-      берётся из выбранного выше — можно смешивать золото и серебро. Шармы на браслете
-      можно <b>перетаскивать мышкой</b>, меняя местами; одиночный клик по шарму — снять.</p>
-  </section>
-
-  <!-- ИТОГ -->
-  <section class="summary">
-    <h2 class="sum-title">Итого</h2>
-    <div class="sum-rows">
-      <div class="sum-row"><span class="k">Тип</span><span class="v" id="sumType">—</span></div>
-      <div class="sum-row"><span class="k">Материал</span><span class="v" id="sumMaterial">—</span></div>
-      <div class="sum-row"><span class="k">Цвет</span><span class="v" id="sumColor">—</span></div>
-      <div class="sum-row" id="sumLevelRow" hidden><span class="k">Уровень</span><span class="v" id="sumLevel">—</span></div>
-      <div class="sum-row"><span class="k">Шармы</span><span class="v" id="sumCharm">Не выбрано</span></div>
-      <div class="sum-row sum-price"><span class="k">Цена</span><span class="v" id="sumPrice">—</span></div>
-    </div>
-    <button class="cta" id="cta">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span>Добавить в корзину</span>
-    </button>
-    <p class="note" id="ctaNote">Цены предварительные — уточняются при оформлении.</p>
-  </section>
-
-  <div class="toast" id="toast"></div>
-</div>
+<div id="root"></div>
 
 <script>
-(function(){
-  "use strict";
+/* TOMAA configurator — faithful data pulled from the live build.
+   Exposed as window.TOMAA. Plain JS so any script can read it. */
+(function () {
+  const ASSET = 'https://ampanchenko.github.io/tomaa-configurator/assets/';
 
-  // ====== БАЗА ПУТЕЙ К КАРТИНКАМ ======
-  // При вставке на сайт замените на полный URL папки assets, напр.:
-  // const BASE = "https://tomaa.ru/configurator/assets/";
-  const BASE = "assets/";
-
-  // ====== ВАРИАНТЫ ОСНОВЫ ======
-  // charm.left/width — позиция и размер шарма в % от картинки браслета.
-  // charm.levels — уровни, на которые можно надеть шарм (top — центр уровня в % от высоты).
-  //   У одинарных один уровень; у двойных — верхний и нижний.
-  const VARIANTS = [
-    { id:"single-10", label:"Узкий · 10 мм", meta:"Браслет для шармов, один оборот", price:1290, placeholder:false, icon:"single10", strap:"10",
-      charm:{ left:50, width:7.2, levels:[ {id:"single", label:"", top:48} ] } },
-    { id:"single-15", label:"Широкий · 15 мм", meta:"Браслет для шармов, один оборот", price:1290, placeholder:true, icon:"single15", strap:"15",
-      charm:{ left:50, width:10.4, levels:[ {id:"single", label:"", top:48} ] } },
-    { id:"double-10", label:"Узкий · 2 оборота", meta:"Браслет на два оборота", price:1990, placeholder:true, icon:"double10", strap:"10",
-      charm:{ left:50, width:7.2, levels:[ {id:"top", label:"Верхний", top:21.8}, {id:"bottom", label:"Нижний", top:76.3} ] } },
-    { id:"double-15", label:"Широкий · 2 оборота", meta:"Браслет на два оборота", price:1990, placeholder:true, icon:"double15", strap:"15",
-      charm:{ left:50, width:10.4, levels:[ {id:"top", label:"Верхний", top:21.8}, {id:"bottom", label:"Нижний", top:76.3} ] } },
-  ];
-
-  // ====== ПОКРЫТИЯ ======
-  const PLATINGS = [
-    { id:"gold",   label:"Золото"  },
-    { id:"silver", label:"Серебро" },
-  ];
-
-  // ====== ПОЛНЫЙ КАТАЛОГ ШАРМОВ (выгрузка store) ======
-  // {id:TildaUID, n:название, c:[категории], loc:латинский id (если есть локальная картинка для
-  //  наложения) | null, ph:фото с tildacdn (превью для новых), v:{покрытие-ширина:{u:UID,p:цена}}}
-const CHARMS_FULL = [
-    {id:"226912341928",n:"Крылья ангела",c:["Защита"],loc:null,ph:{g:"https://static.tildacdn.com/tild3464-3135-4630-b461-393362316231/Studio_Session-129__.jpg",s:"https://static.tildacdn.com/tild3334-3231-4530-b765-643065616665/Studio_Session-129__.jpg"},v:{"silver-10":{u:"847887714831",p:1290}, "gold-10":{u:"126905093441",p:1490}, "silver-15":{u:"865583408724",p:1390}, "gold-15":{u:"758875586596",p:1590}}},
-    {id:"248654755842",n:"Свободный волк",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3837-6631-4332-a261-383430613430/Studio_Session-119_1.jpg",s:"https://static.tildacdn.com/tild3739-3164-4437-b939-626537616234/Studio_Session-119_2.jpg"},v:{"silver-15":{u:"815228139501",p:1390}, "gold-15":{u:"848336564649",p:1590}}},
-    {id:"128519389570",n:"Мягкая лапка",c:["Удача"],loc:"paw",ph:{g:"https://static.tildacdn.com/tild6534-3662-4737-b333-336263353036/Studio_Session-148__.jpg",s:"https://static.tildacdn.com/tild6539-3535-4330-a165-613439356339/Studio_Session-148__.jpg"},v:{"silver-10":{u:"365168990346",p:1290}, "gold-10":{u:"874972658694",p:1490}, "silver-15":{u:"670487423902",p:1390}, "gold-15":{u:"430377309766",p:1590}}},
-    {id:"783601632737",n:"Рог Одина",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6430-3465-4831-a363-363162396430/Studio_Session-232__.jpg",s:"https://static.tildacdn.com/tild3631-3833-4162-b234-343938613836/Studio_Session-232__.jpg"},v:{"silver-15":{u:"354955614669",p:1390}, "gold-15":{u:"496687060910",p:1590}}},
-    {id:"549696511265",n:"Дельфины радости",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6637-6164-4034-b537-633430623166/Studio_Session-117__.jpg",s:"https://static.tildacdn.com/tild6462-3862-4334-a662-663634353762/Studio_Session-117__.jpg"},v:{"silver-10":{u:"229697224877",p:1290}, "gold-10":{u:"962594546302",p:1490}, "silver-15":{u:"713599086375",p:1390}, "gold-15":{u:"505408403692",p:1590}}},
-    {id:"205190413152",n:"Медведь опоры",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6432-6333-4131-a233-333437643133/Studio_Session-195__.jpg",s:"https://static.tildacdn.com/tild6234-6466-4632-a232-616233636138/Studio_Session-195__.jpg"},v:{"silver-15":{u:"443181806157",p:1390}, "gold-15":{u:"638013513930",p:1590}}},
-    {id:"951195009010",n:"Когти силы",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3533-3734-4635-a338-643231303434/Studio_Session-200__.jpg",s:"https://static.tildacdn.com/tild3865-3437-4864-b034-303038363236/Studio_Session-200__.jpg"},v:{"silver-15":{u:"287727606133",p:1390}, "gold-15":{u:"728071979042",p:1590}}},
-    {id:"115430545674",n:"Тигр движения",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3937-3862-4339-a532-393332373138/Studio_Session-229__.jpg",s:"https://static.tildacdn.com/tild6562-6466-4832-b038-623764373232/Studio_Session-229__.jpg"},v:{"silver-15":{u:"704378391616",p:1390}, "gold-15":{u:"731436525718",p:1590}}},
-    {id:"816264303566",n:"Замок на счастье",c:["Любовь", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6265-6236-4934-b834-333830316362/Studio_Session-174__.jpg",s:"https://static.tildacdn.com/tild3235-3330-4230-a334-333364306265/Studio_Session-174__.jpg"},v:{"silver-10":{u:"172416161688",p:1290}, "gold-10":{u:"474500097550",p:1490}, "silver-15":{u:"338874245010",p:1390}, "gold-15":{u:"872548676399",p:1590}}},
-    {id:"702083138982",n:"Кошка уюта",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3861-3135-4561-a639-653136326533/Studio_Session-186__.jpg",s:"https://static.tildacdn.com/tild3435-6638-4662-a331-393632666266/Studio_Session-186__.jpg"},v:{"silver-10":{u:"672066186764",p:1290}, "gold-10":{u:"498866361589",p:1490}, "silver-15":{u:"673776213468",p:1390}, "gold-15":{u:"963572735631",p:1590}}},
-    {id:"261551494171",n:"Шарм [Скрипичный ключ]",c:["Увлечения", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3638-3638-4939-b564-326430636461/Studio_Session-152__.jpg",s:"https://static.tildacdn.com/tild6664-3762-4634-a638-393861353939/Studio_Session-152__.jpg"},v:{"silver-10":{u:"529398491435",p:1290}, "gold-10":{u:"847511314792",p:1490}, "silver-15":{u:"761210198977",p:1390}, "gold-15":{u:"527642682218",p:1590}}},
-    {id:"900620685631",n:"Ключ от сердца",c:["Любовь", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3834-3565-4961-a263-393738316635/Studio_Session-182__.jpg",s:"https://static.tildacdn.com/tild3833-3663-4638-b665-346264343636/Studio_Session-182__.jpg"},v:{"silver-10":{u:"800283301669",p:1290}, "gold-10":{u:"859160866133",p:1490}, "silver-15":{u:"646964216142",p:1390}, "gold-15":{u:"491693928980",p:1590}}},
-    {id:"552656773048",n:"Слон благополучия",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3535-3262-4837-a163-316261393431/Studio_Session-203__.jpg",s:"https://static.tildacdn.com/tild3639-6361-4363-b638-633963366535/Studio_Session-203__.jpg"},v:{"silver-10":{u:"553669936456",p:890}, "gold-10":{u:"640362287795",p:990}, "silver-15":{u:"346856810247",p:990}, "gold-15":{u:"165509281574",p:1090}}},
-    {id:"705244378675",n:"Уаджет, око Гора",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6464-3036-4937-b433-396630323735/Studio_Session-208__.jpg",s:"https://static.tildacdn.com/tild3066-6364-4432-b063-363234333535/Studio_Session-208__.jpg"},v:{"silver-15":{u:"155612470020",p:1390}, "gold-15":{u:"218915083941",p:1590}}},
-    {id:"729419289285",n:"Христианский крест",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3436-3666-4937-a232-386636653233/Studio_Session-183__.jpg",s:"https://static.tildacdn.com/tild6134-6163-4237-b863-346635613863/Studio_Session-183__.jpg"},v:{"silver-10":{u:"115106080154",p:1290}, "gold-10":{u:"648464635141",p:1490}, "silver-15":{u:"847897153399",p:1390}, "gold-15":{u:"536253323554",p:1590}}},
-    {id:"694786939449",n:"Шарм [Чашка кофе]",c:["Увлечения"],loc:null,ph:{g:"https://static.tildacdn.com/tild6432-6562-4562-a338-326532363836/Studio_Session-223__.jpg",s:"https://static.tildacdn.com/tild6238-3461-4765-b066-353635343564/Studio_Session-223__.jpg"},v:{"silver-10":{u:"675746135690",p:890}, "gold-10":{u:"242940501553",p:990}, "silver-15":{u:"877474392066",p:990}, "gold-15":{u:"525626057386",p:1090}}},
-    {id:"728670440691",n:"Звезда Давида",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3430-3238-4131-b235-643338373365/Studio_Session-176__.jpg",s:"https://static.tildacdn.com/tild3939-6137-4562-b438-343637363337/Studio_Session-176__.jpg"},v:{"silver-10":{u:"525671250379",p:1290}, "gold-10":{u:"366930716938",p:1490}, "silver-15":{u:"541807348924",p:1390}, "gold-15":{u:"996028553860",p:1590}}},
-    {id:"620920605940",n:"Хамса, рука Фатимы",c:["Защита"],loc:null,ph:{g:"https://static.tildacdn.com/tild3333-6431-4832-a632-353636653838/Studio_Session-231__.jpg",s:"https://static.tildacdn.com/tild3532-3435-4035-b861-303332333462/Studio_Session-231__.jpg"},v:{"silver-10":{u:"161150783135",p:1290}, "gold-10":{u:"787335501473",p:1490}, "silver-15":{u:"208909382776",p:1390}, "gold-15":{u:"116158940742",p:1590}}},
-    {id:"652158483972",n:"Якорь надежды",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3536-3763-4935-a437-336139636434/Studio_Session-197__.jpg",s:"https://static.tildacdn.com/tild3439-3063-4735-b532-303436316262/Studio_Session-197__.jpg"},v:{"silver-10":{u:"310889573369",p:1290}, "gold-10":{u:"280428163443",p:1490}, "silver-15":{u:"173302352782",p:1390}, "gold-15":{u:"513019118343",p:1590}}},
-    {id:"960069050892",n:"Око мудрости",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3136-6363-4066-b865-323937356535/Studio_Session-170__.jpg",s:"https://static.tildacdn.com/tild3638-3565-4433-b433-383038353862/Studio_Session-170__.jpg"},v:{"silver-15":{u:"999472640910",p:1390}, "gold-15":{u:"499104858368",p:1590}}},
-    {id:"838161816835",n:"Колесо Сварога",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6263-6139-4264-b865-303330333434/Studio_Session-198__.jpg",s:"https://static.tildacdn.com/tild6431-6139-4836-b664-643664653866/Studio_Session-198__.jpg"},v:{"silver-15":{u:"258819745798",p:1390}, "gold-15":{u:"287760729715",p:1590}}},
-    {id:"877193096905",n:"Шарм [Йога]",c:["Увлечения"],loc:null,ph:{g:"https://static.tildacdn.com/tild3235-3136-4564-b864-623332346561/Studio_Session-171__.jpg",s:"https://static.tildacdn.com/tild6238-3130-4334-b339-393264663836/Studio_Session-171__.jpg"},v:{"silver-10":{u:"980175940292",p:890}, "gold-10":{u:"201076398974",p:990}, "silver-15":{u:"900893779184",p:990}, "gold-15":{u:"424681137218",p:1090}}},
-    {id:"743956520658",n:"Шарм [Яхта, парус...]",c:["Увлечения", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3664-6562-4665-b166-396337383864/Studio_Session-210__.jpg",s:"https://static.tildacdn.com/tild6566-3539-4734-b465-326337323966/Studio_Session-210__.jpg"},v:{"silver-10":{u:"487044398549",p:1290}, "gold-10":{u:"663002299628",p:1490}, "silver-15":{u:"512482737297",p:1390}, "gold-15":{u:"525789866821",p:1590}}},
-    {id:"417501376542",n:"Шармы [Группа крови]",c:["Зодиак | Буквы | Группы крови", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3063-3761-4732-b838-363066646232/3.jpg",s:"https://static.tildacdn.com/tild3063-3761-4732-b838-363066646232/3.jpg"},v:{}},
-    {id:"835324155650",n:"Энергия солнца",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6634-3832-4335-a435-366532663866/Studio_Session-141__.jpg",s:"https://static.tildacdn.com/tild6131-3733-4630-b866-346134336338/Studio_Session-141__.jpg"},v:{"silver-10":{u:"556988087851",p:1290}, "gold-10":{u:"627967764085",p:1490}, "silver-15":{u:"590515622700",p:1390}, "gold-15":{u:"903281992165",p:1590}}},
-    {id:"734280774202",n:"Лотос света",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6639-6138-4564-a130-616635326465/Studio_Session-132__.jpg",s:"https://static.tildacdn.com/tild3139-3731-4332-a538-303730616437/Studio_Session-132__.jpg"},v:{"silver-10":{u:"698732164258",p:1290}, "gold-10":{u:"974294557352",p:1490}, "silver-15":{u:"509737606252",p:1390}, "gold-15":{u:"405207177871",p:1590}}},
-    {id:"770979651434",n:"Папоротник силы",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild3063-3435-4233-a231-353032666162/Studio_Session-138__.jpg",s:"https://static.tildacdn.com/tild3134-6161-4163-b336-653061366533/Studio_Session-138__.jpg"},v:{"silver-10":{u:"409869209019",p:1290}, "gold-10":{u:"924142231467",p:1490}, "silver-15":{u:"383800745317",p:1390}, "gold-15":{u:"732964294299",p:1590}}},
-    {id:"517812030853",n:"Клевер большой удачи",c:["Удача"],loc:"clover",ph:{g:"https://static.tildacdn.com/tild3834-6166-4434-b563-616336383336/Studio_Session-143__.jpg",s:"https://static.tildacdn.com/tild6334-3436-4632-a565-623630363338/Studio_Session-143__.jpg"},v:{"silver-10":{u:"248570336943",p:1290}, "gold-10":{u:"137686017560",p:1490}, "silver-15":{u:"390886742227",p:1390}, "gold-15":{u:"572459198264",p:1590}}},
-    {id:"737322631260",n:"Бесконечность",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3731-3933-4139-a564-616135393065/Studio_Session-162__.jpg",s:"https://static.tildacdn.com/tild3062-3130-4363-a431-626465663137/Studio_Session-162__.jpg"},v:{"silver-10":{u:"756901452282",p:1290}, "gold-10":{u:"155056325228",p:1490}, "silver-15":{u:"932313534129",p:1390}, "gold-15":{u:"646987222129",p:1590}}},
-    {id:"596564475265",n:"Шарм [Самолет-мечта]",c:["Увлечения", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6535-6134-4331-b330-303531373233/Studio_Session-134__.jpg",s:"https://static.tildacdn.com/tild6566-3164-4363-b761-386662333361/Studio-Session-134__.jpg"},v:{"silver-10":{u:"101282991620",p:1290}, "gold-10":{u:"743752885867",p:1490}, "silver-15":{u:"731821019038",p:1390}, "gold-15":{u:"228888519655",p:1590}}},
-    {id:"149220450308",n:"Сердце любви",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild6164-6561-4266-b663-616261353633/Studio_Session-122__.jpg",s:"https://static.tildacdn.com/tild3264-3831-4161-b265-626534313563/Studio_Session-122__.jpg"},v:{"silver-10":{u:"355324426133",p:1290}, "gold-10":{u:"237807588438",p:1490}, "silver-15":{u:"400108878443",p:1390}, "gold-15":{u:"843868299196",p:1590}}},
-    {id:"878545001766",n:"Стрела в цель",c:["Удача", "Брутальные"],loc:"arrow",ph:{g:"https://static.tildacdn.com/tild3930-3539-4436-a564-333535346534/Studio_Session-150__.jpg",s:"https://static.tildacdn.com/tild6236-3633-4537-a233-353736323332/Studio_Session-150__.jpg"},v:{"silver-10":{u:"974669223976",p:890}, "gold-10":{u:"683630355649",p:990}, "silver-15":{u:"379217570616",p:990}, "gold-15":{u:"524572919869",p:1090}}},
-    {id:"692402820113",n:"Бабочка свободы",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6339-3636-4934-b639-643130336161/Studio_Session-127__.jpg",s:"https://static.tildacdn.com/tild6161-3765-4062-b439-613266393033/Studio_Session-127__.jpg"},v:{"silver-10":{u:"590675493361",p:1290}, "gold-10":{u:"247807274933",p:1490}, "silver-15":{u:"191227374790",p:1390}, "gold-15":{u:"378136327985",p:1590}}},
-    {id:"749538505543",n:"Корона принцессы",c:["Символы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6336-3936-4333-b263-613131636461/Studio_Session-192__.jpg",s:"https://static.tildacdn.com/tild6265-3936-4765-b936-613134346335/Studio_Session-192__.jpg"},v:{"silver-10":{u:"660465149083",p:1290}, "gold-10":{u:"957791084034",p:1490}, "silver-15":{u:"107231277755",p:1390}, "gold-15":{u:"541214704558",p:1590}}},
-    {id:"401147197642",n:"Волшебный единорог",c:["Удача"],loc:"unicorn",ph:{g:"https://static.tildacdn.com/tild6133-3565-4162-b931-633335633636/Studio_Session-175__.jpg",s:"https://static.tildacdn.com/tild6234-3566-4330-a333-343532316662/Studio_Session-175__.jpg"},v:{"silver-10":{u:"296457525740",p:1290}, "gold-10":{u:"331149253330",p:1490}, "silver-15":{u:"140106346261",p:1390}, "gold-15":{u:"606414169567",p:1590}}},
-    {id:"279917889076",n:"Сила подковы",c:["Удача", "Брутальные"],loc:"horseshoe",ph:{g:"https://static.tildacdn.com/tild3837-3563-4739-a362-663831333631/Studio_Session-225__.jpg",s:"https://static.tildacdn.com/tild3032-6234-4764-b430-393865303037/Studio_Session-225__.jpg"},v:{"silver-10":{u:"769744888159",p:1290}, "gold-10":{u:"269987082454",p:1490}, "silver-15":{u:"860589997685",p:1390}, "gold-15":{u:"901888344047",p:1590}}},
-    {id:"192218042600",n:"Крепкая семья",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild3965-3633-4264-a132-633839336235/Studio_Session-233__.jpg",s:"https://static.tildacdn.com/tild3934-3735-4466-a266-366464356563/Studio_Session-233__.jpg"},v:{"silver-10":{u:"460952747491",p:1290}, "gold-10":{u:"726595903784",p:1490}, "silver-15":{u:"882032160385",p:1390}, "gold-15":{u:"542031932372",p:1590}}},
-    {id:"527966522065",n:"Моя девочка",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild3562-3437-4639-b261-303032306535/Studio_Session-172__.jpg",s:"https://static.tildacdn.com/tild3331-3665-4738-b363-393835613935/Studio_Session-172__.jpg"},v:{"silver-10":{u:"295324900021",p:1290}, "gold-10":{u:"307560756213",p:1490}, "silver-15":{u:"347249433511",p:1390}, "gold-15":{u:"602131750847",p:1590}}},
-    {id:"608461705186",n:"Мой мальчик",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild6361-3638-4266-b061-343535333865/Studio_Session-224__.jpg",s:"https://static.tildacdn.com/tild3763-3361-4062-b464-376235666631/Studio_Session-224__.jpg"},v:{"silver-10":{u:"547037671689",p:1290}, "gold-10":{u:"146387989004",p:1490}, "silver-15":{u:"117984291196",p:1390}, "gold-15":{u:"478686247405",p:1590}}},
-    {id:"214989801596",n:"Шарм [Кадуцей]",c:["Увлечения", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6230-6362-4434-b330-373063663430/Studio_Session-158__.jpg",s:"https://static.tildacdn.com/tild3865-6163-4437-b364-666534323033/Studio_Session-158__.jpg"},v:{"silver-10":{u:"236395183285",p:1290}, "gold-10":{u:"853740555231",p:1490}, "silver-15":{u:"926076265252",p:1390}, "gold-15":{u:"795476727128",p:1590}}},
-    {id:"103734506089",n:"Сова мудрости",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3131-3539-4232-a366-346238343936/8ae7d7bc-f159-4a7d-8.jpeg",s:"https://static.tildacdn.com/tild3563-3064-4764-b237-626539323736/WhatsApp_Image_2020-.jpeg"},v:{"silver-10":{u:"830389620303",p:1290}, "gold-10":{u:"803139700973",p:1490}, "silver-15":{u:"223001190688",p:1390}, "gold-15":{u:"197888756315",p:1590}}},
-    {id:"748503176061",n:"Роза характера",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6137-3666-4464-b463-313131353361/AFA219F4-39EB-44B3-8.jpeg",s:"https://static.tildacdn.com/tild3265-3733-4433-b766-633237663663/A8249E55-98CA-4A77-9.jpeg"},v:{"silver-10":{u:"994617875159",p:890}, "gold-10":{u:"804961923507",p:990}, "silver-15":{u:"635672039303",p:990}, "gold-15":{u:"702924569668",p:1090}}},
-    {id:"656493923285",n:"Сакура момента",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild3330-6666-4938-b961-313336613762/6668A60B-DA43-40CF-9.jpeg",s:"https://static.tildacdn.com/tild3439-3339-4131-b462-613234393837/9E207B9C-6BDF-4141-A.jpeg"},v:{"silver-10":{u:"194012645653",p:1290}, "gold-10":{u:"202363649229",p:1490}, "silver-15":{u:"443664728789",p:1390}, "gold-15":{u:"711865213427",p:1590}}},
-    {id:"237478025446",n:"Ромашка радости",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6334-6562-4566-a332-333262363838/1DB86C45-E661-45C5-8.jpeg",s:"https://static.tildacdn.com/tild3962-6265-4435-a633-323966373462/DA17CBA7-5C43-4715-9.jpeg"},v:{"silver-10":{u:"711679724278",p:1290}, "gold-10":{u:"439937880823",p:1490}, "silver-15":{u:"509337765399",p:1390}, "gold-15":{u:"523950911229",p:1590}}},
-    {id:"647523505952",n:"Колокольчик тишины",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6632-6339-4562-b030-646135386663/7652AF24-8C8D-4CF9-9.jpeg",s:"https://static.tildacdn.com/tild3732-3530-4135-b836-393062636661/A590CDD4-0B8E-41BB-B.jpeg"},v:{"silver-10":{u:"933139101571",p:1290}, "gold-10":{u:"803911712760",p:1490}, "silver-15":{u:"819885114092",p:1390}, "gold-15":{u:"877659358136",p:1590}}},
-    {id:"352879523232",n:"Мак вдохновения",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild6234-6163-4365-b665-393764373437/10A7042C-80F0-4C98-9.jpeg",s:"https://static.tildacdn.com/tild6338-3836-4530-b330-653034303036/C25CF3C6-1E57-4E9C-B.jpeg"},v:{"silver-10":{u:"966119568457",p:890}, "gold-10":{u:"301930815353",p:990}, "silver-15":{u:"996082449455",p:990}, "gold-15":{u:"855937790560",p:1090}}},
-    {id:"991851590609",n:"Незабудки памяти",c:["Цветы"],loc:null,ph:{g:"https://static.tildacdn.com/tild3339-6161-4464-b932-383965393735/859B7A58-577D-4F9B-9.jpeg",s:"https://static.tildacdn.com/tild3163-3464-4738-a165-666134383935/F2BF5B95-FC44-4696-A.jpeg"},v:{"silver-10":{u:"371325615375",p:890}, "gold-10":{u:"169214181401",p:990}, "silver-15":{u:"631107024409",p:990}, "gold-15":{u:"444952420032",p:1090}}},
-    {id:"756937959878",n:"Инь и Ян",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3664-6438-4134-a665-393063636539/a286d6a9-d40c-4479-a.jpeg",s:"https://static.tildacdn.com/tild3564-3261-4037-b734-363430386461/a286d6a9-d40c-4479-a.jpeg"},v:{"silver-10":{u:"847410857073",p:1290}, "gold-10":{u:"320760529771",p:1490}, "silver-15":{u:"466422903243",p:1390}, "gold-15":{u:"813911352710",p:1590}}},
-    {id:"374049981407",n:"Счастье, японский иероглиф",c:["Удача"],loc:"hieroglyph",ph:{g:"https://static.tildacdn.com/tild6339-6134-4331-b337-633963636462/Studio_Session-217__.jpeg",s:"https://static.tildacdn.com/tild3565-3831-4630-a133-616231343061/Studio_Session-217__.jpeg"},v:{"silver-10":{u:"279855223728",p:1290}, "gold-10":{u:"813768448176",p:1490}, "silver-15":{u:"767355802730",p:1390}, "gold-15":{u:"803047864680",p:1590}}},
-    {id:"878698512841",n:"Лев характера",c:["Животные", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6436-3938-4030-b736-363839373266/Studio_Session-196_4.jpeg",s:"https://static.tildacdn.com/tild6365-6639-4632-a366-623664663930/Studio_Session-196_5.jpeg"},v:{"silver-15":{u:"343394205681",p:1390}, "gold-15":{u:"115274224861",p:1590}}},
-    {id:"757947748441",n:"Феникс вечной жизни",c:["Защита", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6461-3030-4232-b233-343163336265/676e910c-8c6d-4476-8.jpg",s:"https://static.tildacdn.com/tild3237-6231-4632-b233-653130616162/676e910c-8c6d-4476-8.jpg"},v:{"silver-10":{u:"174507070191",p:1290}, "gold-10":{u:"671688759891",p:1490}, "silver-15":{u:"997105725311",p:1390}, "gold-15":{u:"773813301711",p:1590}}},
-    {id:"892217900731",n:"Вечная спираль",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3233-3964-4836-b630-373438373631/Studio_Session-164.jpg",s:"https://static.tildacdn.com/tild6231-3134-4234-b233-333663306566/Studio_Session-164-2.jpg"},v:{"silver-10":{u:"104465828311",p:1290}, "gold-10":{u:"292843765091",p:1490}, "silver-15":{u:"391779526121",p:1390}, "gold-15":{u:"449358965821",p:1590}}},
-    {id:"187529531211",n:"Дракон благополучия",c:["Удача", "Брутальные"],loc:"dragon",ph:{g:"https://static.tildacdn.com/tild3832-3834-4463-b465-303465616361/WhatsApp_Image_2021-.jpg",s:"https://static.tildacdn.com/tild3864-6262-4637-b030-366534373035/WhatsApp_Image_2021-.jpg"},v:{"silver-10":{u:"581936273961",p:1290}, "gold-10":{u:"833309898151",p:1490}, "silver-15":{u:"988267747351",p:1390}, "gold-15":{u:"636024626661",p:1590}}},
-    {id:"790995117161",n:"Любимый малыш",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild6238-6439-4137-a663-643231303964/WhatsApp_Image_2021-.jpg",s:"https://static.tildacdn.com/tild3038-6138-4832-b733-636361353735/WhatsApp_Image_2021-.jpg"},v:{"silver-10":{u:"584838322391",p:1290}, "gold-10":{u:"472205077891",p:1490}, "silver-15":{u:"833600932331",p:1390}, "gold-15":{u:"304569764901",p:1590}}},
-    {id:"497512124391",n:"Шарм [Перо творца]",c:["Увлечения"],loc:null,ph:{g:"https://static.tildacdn.com/tild3061-6131-4133-a163-396130613638/PNG_image_5-5.jpg",s:"https://static.tildacdn.com/tild6261-6336-4639-b665-353661316165/PNG_image_5-6.jpg"},v:{"silver-10":{u:"132893390351",p:1290}, "gold-10":{u:"596182738251",p:1490}, "silver-15":{u:"532227068331",p:1390}, "gold-15":{u:"762707885791",p:1590}}},
-    {id:"388982727001",n:"Шарм [Вегетарианец]",c:["Увлечения", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3365-3264-4165-b430-313236306237/88DF2E18-54A2-4986-A.jpg",s:"https://static.tildacdn.com/tild3364-6537-4565-a266-316466366161/88DF2E18-54A2-4986-A.jpg"},v:{"silver-10":{u:"467041536351",p:890}, "gold-10":{u:"950104627381",p:990}, "silver-15":{u:"409183559651",p:990}, "gold-15":{u:"560057647481",p:1090}}},
-    {id:"986794667181",n:"Шармы [Знак зодиака]",c:["Зодиак | Буквы | Группы крови", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6466-6139-4866-b332-383663643634/1.jpg",s:"https://static.tildacdn.com/tild6466-6139-4866-b332-383663643634/1.jpg"},v:{"silver-10":{u:"327872757001",p:1290}, "gold-10":{u:"543614171871",p:1490}, "silver-15":{u:"881961056331",p:1390}, "gold-15":{u:"826902587121",p:1590}}},
-    {id:"655892461051",n:"Шармы [Буквы]",c:["Зодиак | Буквы | Группы крови", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild3532-3334-4362-a533-653935323065/2.jpg",s:"https://static.tildacdn.com/tild3532-3334-4362-a533-653935323065/2.jpg"},v:{"silver-10":{u:"478230005821",p:1290}, "gold-10":{u:"467340833801",p:1490}, "silver-15":{u:"906453713071",p:1390}, "gold-15":{u:"924926510871",p:1590}}},
-    {id:"205207465201",n:"Аист на крыше",c:["Любовь"],loc:null,ph:{g:"https://static.tildacdn.com/tild3636-3538-4338-a337-623361626437/__-2.jpg",s:"https://static.tildacdn.com/tild6536-3530-4534-b333-303764313136/_-2.jpg"},v:{"silver-10":{u:"479072710471",p:1290}, "gold-10":{u:"425970724851",p:1490}, "silver-15":{u:"803948422291",p:1390}, "gold-15":{u:"518176515061",p:1590}}},
-    {id:"911287728601",n:"Талисман-ракушка",c:["Удача"],loc:"shell",ph:{g:"https://static.tildacdn.com/tild6363-3838-4838-b065-616632303462/__2.jpg",s:"https://static.tildacdn.com/tild3663-6463-4833-a338-383464353335/_silver_2.jpg"},v:{"silver-10":{u:"567901631601",p:890}, "gold-10":{u:"595991536711",p:990}, "silver-15":{u:"827415284751",p:990}, "gold-15":{u:"932506617831",p:1090}}},
-    {id:"510970538871",n:"Ласточка весны",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6239-3031-4932-b434-303538653139/__-2.jpg",s:"https://static.tildacdn.com/tild3434-3664-4338-a561-636635316262/__-2.jpg"},v:{"silver-10":{u:"397732191781",p:1190}, "gold-10":{u:"522541216561",p:1490}}},
-    {id:"948062573281",n:"Символ мира",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/tild6266-3433-4166-b833-316431333033/Studio_Session-173.jpg",s:"https://static.tildacdn.com/tild3162-6365-4330-b135-376366636565/Studio_Session-173-2.jpg"},v:{"silver-10":{u:"838344524891",p:1290}, "gold-10":{u:"154841349591",p:1490}, "silver-15":{u:"308168454461",p:1390}, "gold-15":{u:"633445930761",p:1590}}},
-    {id:"873601251961",n:"Лошадка стремления",c:["Животные"],loc:null,ph:{g:"https://static.tildacdn.com/stor3264-6531-4266-b438-316631386336/64023765.jpg",s:"https://static.tildacdn.com/stor6638-6234-4762-a266-326264636631/14109991.jpg"},v:{"silver-10":{u:"223435355911",p:1290}, "gold-10":{u:"126506969351",p:1490}, "silver-15":{u:"987132822361",p:1390}, "gold-15":{u:"184520438621",p:1590}}},
-    {id:"140417587662",n:"Корги радости",c:["Животные", "Животные: собаки!"],loc:null,ph:{g:"https://static.tildacdn.com/stor6336-3363-4236-a535-323865376638/78142147.jpg",s:"https://static.tildacdn.com/stor3734-3037-4862-a130-386534656533/51223242.jpg"},v:{"silver-10":{u:"953146827422",p:1290}, "gold-10":{u:"808598763862",p:1490}, "silver-15":{u:"764643316742",p:1390}, "gold-15":{u:"103341932542",p:1590}}},
-    {id:"320505316102",n:"Чихуахуа верности",c:["Животные", "Животные: собаки!"],loc:null,ph:{g:"https://static.tildacdn.com/stor6462-6434-4565-b937-353161653862/32753344.jpg",s:"https://static.tildacdn.com/stor3732-6237-4765-a361-343732366563/33542488.jpg"},v:{"silver-10":{u:"669654623372",p:1290}, "gold-10":{u:"887573078592",p:1190}, "silver-15":{u:"242067293002",p:1390}, "gold-15":{u:"860057993172",p:1590}}},
-    {id:"715712676582",n:"Шпиц настроения",c:["Животные", "Животные: собаки!"],loc:null,ph:{g:"https://static.tildacdn.com/stor6566-6162-4563-b864-643766663365/46385839.jpg",s:"https://static.tildacdn.com/stor6566-6162-4563-b864-643766663365/46385839.jpg"},v:{"silver-10":{u:"256691564202",p:1290}, "gold-10":{u:"610070660532",p:1490}, "silver-15":{u:"995466814932",p:1390}, "gold-15":{u:"481421010222",p:1590}}},
-    {id:"620070837182",n:"Пудель шарма",c:["Животные", "Животные: собаки!"],loc:null,ph:{g:"https://static.tildacdn.com/stor3861-3162-4466-a437-393435373239/86760535.jpg",s:"https://static.tildacdn.com/stor6531-3337-4437-a666-626235353265/37478522.jpg"},v:{"silver-10":{u:"381237184332",p:1290}, "gold-10":{u:"555055611432",p:1490}, "silver-15":{u:"728041327172",p:1390}, "gold-15":{u:"330777530282",p:1590}}},
-    {id:"333614979812",n:"Сила Луны",c:["Брутальные", "Защита"],loc:null,ph:{g:"https://static.tildacdn.com/stor3566-6363-4632-a538-393737633236/14454747.jpg",s:"https://static.tildacdn.com/stor3739-3863-4964-a433-623732663631/30240028.jpg"},v:{"silver-10":{u:"783013787652",p:1290}, "gold-10":{u:"555252832082",p:1390}, "silver-15":{u:"446827969762",p:1290}, "gold-15":{u:"258663113832",p:1490}}},
-    {id:"859882512852",n:"Знак Ом",c:["Символы", "Брутальные"],loc:null,ph:{g:"https://static.tildacdn.com/stor6238-6534-4065-a461-386561613731/26638754.jpg",s:"https://static.tildacdn.com/stor6265-6331-4630-a233-366132616132/20315027.jpg"},v:{"silver-10":{u:"360675167692",p:1190}, "gold-10":{u:"821499553192",p:1290}, "silver-15":{u:"621216592902",p:1390}, "gold-15":{u:"733455595152",p:1490}}},
-    {id:"395470415202",n:"Руна Мир",c:["Брутальные", "Защита"],loc:null,ph:{g:"https://static.tildacdn.com/stor3937-6131-4232-b537-386434663761/80005114.jpg",s:"https://static.tildacdn.com/stor6362-3034-4137-b065-636138393430/21769846.jpg"},v:{"silver-10":{u:"878611206382",p:1190}, "gold-10":{u:"884411276822",p:1290}, "silver-15":{u:"135883700352",p:1390}, "gold-15":{u:"317198673812",p:1490}}},
-    {id:"568411920912",n:"Руна Алатырь",c:["Брутальные", "Защита"],loc:null,ph:{g:"https://static.tildacdn.com/stor3964-3837-4361-b363-633536373564/47168734.jpg",s:"https://static.tildacdn.com/stor3539-3865-4234-b239-323333653763/20154485.jpg"},v:{"silver-10":{u:"690801068842",p:1190}, "gold-10":{u:"283619257252",p:1290}, "silver-15":{u:"180579383622",p:1390}, "gold-15":{u:"820688857232",p:1490}}},
-    {id:"279379812122",n:"Руна Берегиня",c:["Брутальные", "Защита"],loc:null,ph:{g:"https://static.tildacdn.com/stor3930-6666-4734-a535-373033353837/17976867.jpg",s:"https://static.tildacdn.com/stor3437-6239-4463-b561-623932306362/51510146.jpg"},v:{"silver-10":{u:"969810899092",p:1290}, "gold-10":{u:"172099145772",p:1490}, "silver-15":{u:"774170556722",p:1390}, "gold-15":{u:"768667517652",p:1590}}},
-    {id:"973028977252",n:"Шампань праздника",c:["Увлечения"],loc:null,ph:{g:"https://static.tildacdn.com/stor6363-6331-4235-a138-656363323632/a94c197aa18c3b068d6b77e7c5f760c0.jpg",s:"https://static.tildacdn.com/stor3462-3435-4335-a235-393631376362/cfb25e9ab3f761e68fa1ab6c0b09818f.jpg"},v:{"silver-10":{u:"239575323852",p:1290}, "gold-10":{u:"968643771642",p:1490}, "silver-15":{u:"690896239462",p:1390}, "gold-15":{u:"523891527492",p:1590}}},
-    {id:"881182874322",n:"Сладкая жизнь",c:["Увлечения"],loc:null,ph:{g:"https://static.tildacdn.com/stor6266-3239-4464-b363-613130346230/9a6f3f4a8283e94d0c6a4e4da76a8762.jpg",s:"https://static.tildacdn.com/stor6438-6236-4330-a333-636238376565/553e8491d668149d6e84ecc83c997276.jpg"},v:{"silver-10":{u:"797765821162",p:1290}, "gold-10":{u:"908098776452",p:1490}, "silver-15":{u:"420970026242",p:1390}, "gold-15":{u:"589295454602",p:1590}}}
-  ];
-  const CHARM_BY_ID = {}; CHARMS_FULL.forEach(function(c){ CHARM_BY_ID[c.id] = c; });
-  // категории для фильтра палитры (id — точная строка из выгрузки, label — короткое имя)
-  const CATEGORIES = [
-    {id:"Удача",label:"Удача"}, {id:"Любовь",label:"Любовь"}, {id:"Защита",label:"Защита"},
-    {id:"Животные",label:"Животные"}, {id:"Цветы",label:"Цветы"}, {id:"Символы",label:"Символы"},
-    {id:"Увлечения",label:"Увлечения"}, {id:"Брутальные",label:"Брутальные"},
-    {id:"Зодиак | Буквы | Группы крови",label:"Зодиак"}, {id:"Животные: собаки!",label:"Собаки"},
-  ];
-
-  // ====== КАТАЛОГ ОСНОВ (браслеты) ======
-  // material -> {label, colors:[{id,name,hex}], uid:{geom:{color:UID}}}.
-  // Картинка основы: bracelets/{geom}-{material}-{color}.webp. Цена — по геометрии (см. VARIANTS.price).
+  // ---- Base straps: material → colours ----
   const BASES = {
-    leather:{label:"Кожа",
-      colors:[{id:"black",name:"Южный чёрный",hex:"#1c1c1c"}, {id:"brown",name:"Классический коричневый",hex:"#4a3122"}, {id:"bordo",name:"Винный бордо",hex:"#5a2030"}, {id:"red",name:"Красный кардинал",hex:"#8e2222"}, {id:"powder",name:"Розовая пудра",hex:"#d9b3a4"}, {id:"white",name:"Альпийский белый",hex:"#e9e3d8"}],
-      uid:{"single-10": {"black": "499893929107", "brown": "511088007241", "bordo": "126301853054", "red": "337333807816", "powder": "866340107950", "white": "194120936060"}, "double-10": {"black": "978556527815", "brown": "379370772601", "bordo": "948346445121", "red": "810575764121", "powder": "944898996977", "white": "773832198537"}, "single-15": {"black": "739078171412", "brown": "455378210635", "bordo": "896696482655", "red": "442148015498", "powder": "553003999997", "white": "325169053821"}, "double-15": {"black": "813599264135", "brown": "204696326191", "bordo": "742336589861", "red": "236944001429", "powder": "127830960976", "white": "818018977038"}}},
-    velvet:{label:"Бархат",
-      colors:[{id:"blue",name:"Утренний голубой",hex:"#6f9fc6"}, {id:"ruby",name:"Вишнёвый рубиновый",hex:"#6e1a2c"}, {id:"turquoise",name:"Загадочный бирюзовый",hex:"#1f8080"}, {id:"grey",name:"Серый серенити",hex:"#9a9aa0"}, {id:"orange",name:"Оранжевый апельсин",hex:"#d9772b"}, {id:"powder",name:"Розовая пудра",hex:"#d9b3a4"}],
-      uid:{"single-10": {"blue": "369234778431", "ruby": "241905289651", "turquoise": "313809356783", "grey": "514794891668", "orange": "603770606311"}, "single-15": {"turquoise": "171058017879", "blue": "800650339562", "ruby": "317941020767", "orange": "535161758101", "grey": "612497583787"}, "double-15": {"ruby": "839075101271", "turquoise": "936637834651", "blue": "608148944271", "orange": "936504493021", "powder": "801960385471", "grey": "799223805881"}, "double-10": {"ruby": "989760712521", "turquoise": "155948583361", "blue": "412235426011", "orange": "503731116181", "powder": "552807232031", "grey": "310966862741"}}},
+    leather: {
+      label: 'Кожа',
+      colors: [
+        { id: 'black',  name: 'Южный чёрный',           hex: '#1c1c1c' },
+        { id: 'brown',  name: 'Классический коричневый', hex: '#4a3122' },
+        { id: 'bordo',  name: 'Винный бордо',            hex: '#5a2030' },
+        { id: 'red',    name: 'Красный кардинал',        hex: '#8e2222' },
+        { id: 'powder', name: 'Розовая пудра',           hex: '#d9b3a4' },
+        { id: 'white',  name: 'Альпийский белый',        hex: '#e9e3d8' },
+      ],
+    },
+    velvet: {
+      label: 'Бархат',
+      colors: [
+        { id: 'blue',      name: 'Утренний голубой',     hex: '#6f9fc6' },
+        { id: 'ruby',      name: 'Вишнёвый рубиновый',   hex: '#6e1a2c' },
+        { id: 'turquoise', name: 'Загадочный бирюзовый', hex: '#1f8080' },
+        { id: 'grey',      name: 'Серый серенити',       hex: '#9a9aa0' },
+        { id: 'orange',    name: 'Оранжевый апельсин',   hex: '#d9772b' },
+        { id: 'powder',    name: 'Розовая пудра',        hex: '#d9b3a4' },
+      ],
+    },
   };
-  const MAX_CHARMS = 5;     // максимум шармов на один ремешок
-  const CHARM_STEP = 0.86;  // шаг между шармами (× ширина шарма) — плотно
 
-  // SVG-иконки типов основы
-  const ICONS = {
-    single10:'<svg width="26" height="15" viewBox="0 0 52 30" fill="currentColor"><rect x="2" y="12" width="48" height="6" rx="3"/></svg>',
-    single15:'<svg width="26" height="15" viewBox="0 0 52 30" fill="currentColor"><rect x="2" y="9" width="48" height="12" rx="6"/></svg>',
-    double10:'<svg width="26" height="15" viewBox="0 0 52 30" fill="currentColor"><rect x="2" y="7" width="48" height="5" rx="2.5"/><rect x="2" y="18" width="48" height="5" rx="2.5"/></svg>',
-    double15:'<svg width="26" height="15" viewBox="0 0 52 30" fill="currentColor"><rect x="2" y="4" width="48" height="9" rx="4.5"/><rect x="2" y="17" width="48" height="9" rx="4.5"/></svg>',
+  // Velvet single-wrap forms (узкий/широкий, один оборот) have no Розовая пудра.
+  const VELVET_NO_POWDER_SINGLE = ['blue', 'ruby', 'turquoise', 'grey', 'orange'];
+
+  // ---- Geometry / variants ----
+  const VARIANTS = [
+    { id: 'single-10', label: 'Узкий браслет на один оборот', sub: '10 мм',  width: 7.2,  rows: 1, base: 1290, soon: false },
+    { id: 'double-10', label: 'Узкий браслет на два оборота',  sub: '10 мм',  width: 7.2,  rows: 1, base: 1990, soon: false },
+    { id: 'single-15', label: 'Широкий браслет на один оборот', sub: '15 мм', width: 10.4, rows: 1, base: 1290, soon: false },
+    { id: 'double-15', label: 'Широкий браслет на два оборота', sub: '15 мм', width: 10.4, rows: 1, base: 1990, soon: false },
+  ];
+
+  const MAX_CHARMS = 5;
+  const CHARM_STEP = 0.92; // spacing between charms × charm width
+
+  // ---- Charms (full catalogue from store export, 73 SKUs) ----
+  // loc → 8 charms have gold/silver transparent webp that mounts live on the strap.
+  // g / s → studio photo (gold / silver) for the picker + medallion fallback.
+  // p → gold·10mm price; silver = p−200, +100 for 15 mm (handled at runtime).
+  // op → old (pre-sale) gold·10mm price, struck through when sale:true.
+  // brutal → also shown under the «Брутальные» tab.
+  const CHARMS = [
+    { id:'paw', n:'Мягкая лапка', cat:'Удача', loc:'paw', p:1490, g:'https://static.tildacdn.com/tild6534-3662-4737-b333-336263353036/Studio_Session-148__.jpg', s:'https://static.tildacdn.com/tild6539-3535-4330-a165-613439356339/Studio_Session-148__.jpg' },
+    { id:'clover', n:'Клевер большой удачи', cat:'Удача', loc:'clover', p:1490, g:'https://static.tildacdn.com/tild3834-6166-4434-b563-616336383336/Studio_Session-143__.jpg', s:'https://static.tildacdn.com/tild6334-3436-4632-a565-623630363338/Studio_Session-143__.jpg' },
+    { id:'arrow', n:'Стрела в цель', cat:'Удача', loc:'arrow', p:990, op:1490, sale:true, brutal:true, g:'https://static.tildacdn.com/tild3930-3539-4436-a564-333535346534/Studio_Session-150__.jpg', s:'https://static.tildacdn.com/tild6236-3633-4537-a233-353736323332/Studio_Session-150__.jpg' },
+    { id:'unicorn', n:'Волшебный единорог', cat:'Удача', loc:'unicorn', p:1490, g:'https://static.tildacdn.com/tild6133-3565-4162-b931-633335633636/Studio_Session-175__.jpg', s:'https://static.tildacdn.com/tild6234-3566-4330-a333-343532316662/Studio_Session-175__.jpg' },
+    { id:'horseshoe', n:'Сила подковы', cat:'Удача', loc:'horseshoe', p:1490, brutal:true, g:'https://static.tildacdn.com/tild3837-3563-4739-a362-663831333631/Studio_Session-225__.jpg', s:'https://static.tildacdn.com/tild3032-6234-4764-b430-393865303037/Studio_Session-225__.jpg' },
+    { id:'hieroglyph', n:'Счастье, японский иероглиф', cat:'Удача', loc:'hieroglyph', p:1490, g:'https://static.tildacdn.com/tild6339-6134-4331-b337-633963636462/Studio_Session-217__.jpeg', s:'https://static.tildacdn.com/tild3565-3831-4630-a133-616231343061/Studio_Session-217__.jpeg' },
+    { id:'dragon', n:'Дракон благополучия', cat:'Удача', loc:'dragon', p:1490, brutal:true, g:'https://static.tildacdn.com/tild3832-3834-4463-b465-303465616361/WhatsApp_Image_2021-.jpg', s:'https://static.tildacdn.com/tild3864-6262-4637-b030-366534373035/WhatsApp_Image_2021-.jpg' },
+    { id:'shell', n:'Талисман-ракушка', cat:'Удача', loc:'shell', p:990, g:'https://static.tildacdn.com/tild6363-3838-4838-b065-616632303462/__2.jpg', s:'https://static.tildacdn.com/tild3663-6463-4833-a338-383464353335/_silver_2.jpg' },
+    { id:'krylya-angela', n:'Крылья ангела', cat:'Защита', loc:null, p:1490, g:'https://static.tildacdn.com/tild3464-3135-4630-b461-393362316231/Studio_Session-129__.jpg', s:'https://static.tildacdn.com/tild3334-3231-4530-b765-643065616665/Studio_Session-129__.jpg' },
+    { id:'uadzhet-oko-gora', n:'Уаджет, око Гора', cat:'Защита', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6464-3036-4937-b433-396630323735/Studio_Session-208__.jpg', s:'https://static.tildacdn.com/tild3066-6364-4432-b063-363234333535/Studio_Session-208__.jpg' },
+    { id:'hristianskiy-krest', n:'Христианский крест', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3436-3666-4937-a232-386636653233/Studio_Session-183__.jpg', s:'https://static.tildacdn.com/tild6134-6163-4237-b863-346635613863/Studio_Session-183__.jpg' },
+    { id:'zvezda-davida', n:'Звезда Давида', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3430-3238-4131-b235-643338373365/Studio_Session-176__.jpg', s:'https://static.tildacdn.com/tild3939-6137-4562-b438-343637363337/Studio_Session-176__.jpg' },
+    { id:'hamsa-ruka-fatimy', n:'Хамса, рука Фатимы', cat:'Защита', loc:null, p:1490, g:'https://static.tildacdn.com/tild3333-6431-4832-a632-353636653838/Studio_Session-231__.jpg', s:'https://static.tildacdn.com/tild3532-3435-4035-b861-303332333462/Studio_Session-231__.jpg' },
+    { id:'yakor-nadezhdy', n:'Якорь надежды', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3536-3763-4935-a437-336139636434/Studio_Session-197__.jpg', s:'https://static.tildacdn.com/tild3439-3063-4735-b532-303436316262/Studio_Session-197__.jpg' },
+    { id:'energiya-solnca', n:'Энергия солнца', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6634-3832-4335-a435-366532663866/Studio_Session-141__.jpg', s:'https://static.tildacdn.com/tild6131-3733-4630-b866-346134336338/Studio_Session-141__.jpg' },
+    { id:'feniks-vechnoy-zhizni', n:'Феникс вечной жизни', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6461-3030-4232-b233-343163336265/676e910c-8c6d-4476-8.jpg', s:'https://static.tildacdn.com/tild3237-6231-4632-b233-653130616162/676e910c-8c6d-4476-8.jpg' },
+    { id:'sila-luny', n:'Сила Луны', cat:'Защита', loc:null, p:1390, brutal:true, g:'https://static.tildacdn.com/stor3566-6363-4632-a538-393737633236/14454747.jpg', s:'https://static.tildacdn.com/stor3739-3863-4964-a433-623732663631/30240028.jpg' },
+    { id:'runa-mir', n:'Руна Мир', cat:'Защита', loc:null, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3937-6131-4232-b537-386434663761/80005114.jpg', s:'https://static.tildacdn.com/stor6362-3034-4137-b065-636138393430/21769846.jpg' },
+    { id:'runa-alatyr', n:'Руна Алатырь', cat:'Защита', loc:null, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3964-3837-4361-b363-633536373564/47168734.jpg', s:'https://static.tildacdn.com/stor3539-3865-4234-b239-323333653763/20154485.jpg' },
+    { id:'runa-bereginya', n:'Руна Берегиня', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/stor3930-6666-4734-a535-373033353837/17976867.jpg', s:'https://static.tildacdn.com/stor3437-6239-4463-b561-623932306362/51510146.jpg' },
+    { id:'zamok-na-schaste', n:'Замок на счастье', cat:'Любовь', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6265-6236-4934-b834-333830316362/Studio_Session-174__.jpg', s:'https://static.tildacdn.com/tild3235-3330-4230-a334-333364306265/Studio_Session-174__.jpg' },
+    { id:'klyuch-ot-serdca', n:'Ключ от сердца', cat:'Любовь', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3834-3565-4961-a263-393738316635/Studio_Session-182__.jpg', s:'https://static.tildacdn.com/tild3833-3663-4638-b665-346264343636/Studio_Session-182__.jpg' },
+    { id:'serdce-lyubvi', n:'Сердце любви', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild6164-6561-4266-b663-616261353633/Studio_Session-122__.jpg', s:'https://static.tildacdn.com/tild3264-3831-4161-b265-626534313563/Studio_Session-122__.jpg' },
+    { id:'krepkaya-semya', n:'Крепкая семья', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild3965-3633-4264-a132-633839336235/Studio_Session-233__.jpg', s:'https://static.tildacdn.com/tild3934-3735-4466-a266-366464356563/Studio_Session-233__.jpg' },
+    { id:'moya-devochka', n:'Моя девочка', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild3562-3437-4639-b261-303032306535/Studio_Session-172__.jpg', s:'https://static.tildacdn.com/tild3331-3665-4738-b363-393835613935/Studio_Session-172__.jpg' },
+    { id:'moy-malchik', n:'Мой мальчик', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild6361-3638-4266-b061-343535333865/Studio_Session-224__.jpg', s:'https://static.tildacdn.com/tild3763-3361-4062-b464-376235666631/Studio_Session-224__.jpg' },
+    { id:'lyubimyy-malysh', n:'Любимый малыш', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild6238-6439-4137-a663-643231303964/WhatsApp_Image_2021-.jpg', s:'https://static.tildacdn.com/tild3038-6138-4832-b733-636361353735/WhatsApp_Image_2021-.jpg' },
+    { id:'aist-na-kryshe', n:'Аист на крыше', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild3636-3538-4338-a337-623361626437/__-2.jpg', s:'https://static.tildacdn.com/tild6536-3530-4534-b333-303764313136/_-2.jpg' },
+    { id:'svobodnyy-volk', n:'Свободный волк', cat:'Животные', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild3837-6631-4332-a261-383430613430/Studio_Session-119_1.jpg', s:'https://static.tildacdn.com/tild3739-3164-4437-b939-626537616234/Studio_Session-119_2.jpg' },
+    { id:'delfiny-radosti', n:'Дельфины радости', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/tild6637-6164-4034-b537-633430623166/Studio_Session-117__.jpg', s:'https://static.tildacdn.com/tild6462-3862-4334-a662-663634353762/Studio_Session-117__.jpg' },
+    { id:'medved-opory', n:'Медведь опоры', cat:'Животные', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6432-6333-4131-a233-333437643133/Studio_Session-195__.jpg', s:'https://static.tildacdn.com/tild6234-6466-4632-a232-616233636138/Studio_Session-195__.jpg' },
+    { id:'kogti-sily', n:'Когти силы', cat:'Животные', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild3533-3734-4635-a338-643231303434/Studio_Session-200__.jpg', s:'https://static.tildacdn.com/tild3865-3437-4864-b034-303038363236/Studio_Session-200__.jpg' },
+    { id:'tigr-dvizheniya', n:'Тигр движения', cat:'Животные', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild3937-3862-4339-a532-393332373138/Studio_Session-229__.jpg', s:'https://static.tildacdn.com/tild6562-6466-4832-b038-623764373232/Studio_Session-229__.jpg' },
+    { id:'koshka-uyuta', n:'Кошка уюта', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/tild3861-3135-4561-a639-653136326533/Studio_Session-186__.jpg', s:'https://static.tildacdn.com/tild3435-6638-4662-a331-393632666266/Studio_Session-186__.jpg' },
+    { id:'slon-blagopoluchiya', n:'Слон благополучия', cat:'Животные', loc:null, p:990, brutal:true, g:'https://static.tildacdn.com/tild3535-3262-4837-a163-316261393431/Studio_Session-203__.jpg', s:'https://static.tildacdn.com/tild3639-6361-4363-b638-633963366535/Studio_Session-203__.jpg' },
+    { id:'babochka-svobody', n:'Бабочка свободы', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/tild6339-3636-4934-b639-643130336161/Studio_Session-127__.jpg', s:'https://static.tildacdn.com/tild6161-3765-4062-b439-613266393033/Studio_Session-127__.jpg' },
+    { id:'sova-mudrosti', n:'Сова мудрости', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/tild3131-3539-4232-a366-346238343936/8ae7d7bc-f159-4a7d-8.jpeg', s:'https://static.tildacdn.com/tild3563-3064-4764-b237-626539323736/WhatsApp_Image_2020-.jpeg' },
+    { id:'lev-haraktera', n:'Лев характера', cat:'Животные', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6436-3938-4030-b736-363839373266/Studio_Session-196_4.jpeg', s:'https://static.tildacdn.com/tild6365-6639-4632-a366-623664663930/Studio_Session-196_5.jpeg' },
+    { id:'lastochka-vesny', n:'Ласточка весны', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/tild6239-3031-4932-b434-303538653139/__-2.jpg', s:'https://static.tildacdn.com/tild3434-3664-4338-a561-636635316262/__-2.jpg' },
+    { id:'loshadka-stremleniya', n:'Лошадка стремления', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/stor3264-6531-4266-b438-316631386336/64023765.jpg', s:'https://static.tildacdn.com/stor6638-6234-4762-a266-326264636631/14109991.jpg' },
+    { id:'korgi-radosti', n:'Корги радости', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/stor6336-3363-4236-a535-323865376638/78142147.jpg', s:'https://static.tildacdn.com/stor3734-3037-4862-a130-386534656533/51223242.jpg' },
+    { id:'chihuahua-vernosti', n:'Чихуахуа верности', cat:'Животные', loc:null, p:1190, g:'https://static.tildacdn.com/stor6462-6434-4565-b937-353161653862/32753344.jpg', s:'https://static.tildacdn.com/stor3732-6237-4765-a361-343732366563/33542488.jpg' },
+    { id:'shpic-nastroeniya', n:'Шпиц настроения', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/stor6566-6162-4563-b864-643766663365/46385839.jpg', s:'https://static.tildacdn.com/stor6566-6162-4563-b864-643766663365/46385839.jpg' },
+    { id:'pudel-sharma', n:'Пудель шарма', cat:'Животные', loc:null, p:1490, g:'https://static.tildacdn.com/stor3861-3162-4466-a437-393435373239/86760535.jpg', s:'https://static.tildacdn.com/stor6531-3337-4437-a666-626235353265/37478522.jpg' },
+    { id:'rog-odina', n:'Рог Одина', cat:'Символы', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6430-3465-4831-a363-363162396430/Studio_Session-232__.jpg', s:'https://static.tildacdn.com/tild3631-3833-4162-b234-343938613836/Studio_Session-232__.jpg' },
+    { id:'oko-mudrosti', n:'Око мудрости', cat:'Символы', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild3136-6363-4066-b865-323937356535/Studio_Session-170__.jpg', s:'https://static.tildacdn.com/tild3638-3565-4433-b433-383038353862/Studio_Session-170__.jpg' },
+    { id:'koleso-svaroga', n:'Колесо Сварога', cat:'Символы', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6263-6139-4264-b865-303330333434/Studio_Session-198__.jpg', s:'https://static.tildacdn.com/tild6431-6139-4836-b664-643664653866/Studio_Session-198__.jpg' },
+    { id:'beskonechnost', n:'Бесконечность', cat:'Символы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3731-3933-4139-a564-616135393065/Studio_Session-162__.jpg', s:'https://static.tildacdn.com/tild3062-3130-4363-a431-626465663137/Studio_Session-162__.jpg' },
+    { id:'korona-princessy', n:'Корона принцессы', cat:'Символы', loc:null, p:1490, g:'https://static.tildacdn.com/tild6336-3936-4333-b263-613131636461/Studio_Session-192__.jpg', s:'https://static.tildacdn.com/tild6265-3936-4765-b936-613134346335/Studio_Session-192__.jpg' },
+    { id:'in-i-yan', n:'Инь и Ян', cat:'Символы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3664-6438-4134-a665-393063636539/a286d6a9-d40c-4479-a.jpeg', s:'https://static.tildacdn.com/tild3564-3261-4037-b734-363430386461/a286d6a9-d40c-4479-a.jpeg' },
+    { id:'vechnaya-spiral', n:'Вечная спираль', cat:'Символы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3233-3964-4836-b630-373438373631/Studio_Session-164.jpg', s:'https://static.tildacdn.com/tild6231-3134-4234-b233-333663306566/Studio_Session-164-2.jpg' },
+    { id:'simvol-mira', n:'Символ мира', cat:'Символы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6266-3433-4166-b833-316431333033/Studio_Session-173.jpg', s:'https://static.tildacdn.com/tild3162-6365-4330-b135-376366636565/Studio_Session-173-2.jpg' },
+    { id:'znak-om', n:'Знак Ом', cat:'Символы', loc:null, p:1290, brutal:true, g:'https://static.tildacdn.com/stor6238-6534-4065-a461-386561613731/26638754.jpg', s:'https://static.tildacdn.com/stor6265-6331-4630-a233-366132616132/20315027.jpg' },
+    { id:'lotos-sveta', n:'Лотос света', cat:'Цветы', loc:null, p:1490, g:'https://static.tildacdn.com/tild6639-6138-4564-a130-616635326465/Studio_Session-132__.jpg', s:'https://static.tildacdn.com/tild3139-3731-4332-a538-303730616437/Studio_Session-132__.jpg' },
+    { id:'paporotnik-sily', n:'Папоротник силы', cat:'Цветы', loc:null, p:1490, g:'https://static.tildacdn.com/tild3063-3435-4233-a231-353032666162/Studio_Session-138__.jpg', s:'https://static.tildacdn.com/tild3134-6161-4163-b336-653061366533/Studio_Session-138__.jpg' },
+    { id:'roza-haraktera', n:'Роза характера', cat:'Цветы', loc:null, p:990, g:'https://static.tildacdn.com/tild6137-3666-4464-b463-313131353361/AFA219F4-39EB-44B3-8.jpeg', s:'https://static.tildacdn.com/tild3265-3733-4433-b766-633237663663/A8249E55-98CA-4A77-9.jpeg' },
+    { id:'sakura-momenta', n:'Сакура момента', cat:'Цветы', loc:null, p:1490, g:'https://static.tildacdn.com/tild3330-6666-4938-b961-313336613762/6668A60B-DA43-40CF-9.jpeg', s:'https://static.tildacdn.com/tild3439-3339-4131-b462-613234393837/9E207B9C-6BDF-4141-A.jpeg' },
+    { id:'romashka-radosti', n:'Ромашка радости', cat:'Цветы', loc:null, p:1490, g:'https://static.tildacdn.com/tild6334-6562-4566-a332-333262363838/1DB86C45-E661-45C5-8.jpeg', s:'https://static.tildacdn.com/tild3962-6265-4435-a633-323966373462/DA17CBA7-5C43-4715-9.jpeg' },
+    { id:'kolokolchik-tishiny', n:'Колокольчик тишины', cat:'Цветы', loc:null, p:1490, g:'https://static.tildacdn.com/tild6632-6339-4562-b030-646135386663/7652AF24-8C8D-4CF9-9.jpeg', s:'https://static.tildacdn.com/tild3732-3530-4135-b836-393062636661/A590CDD4-0B8E-41BB-B.jpeg' },
+    { id:'mak-vdohnoveniya', n:'Мак вдохновения', cat:'Цветы', loc:null, p:990, op:1490, sale:true, g:'https://static.tildacdn.com/tild6234-6163-4365-b665-393764373437/10A7042C-80F0-4C98-9.jpeg', s:'https://static.tildacdn.com/tild6338-3836-4530-b330-653034303036/C25CF3C6-1E57-4E9C-B.jpeg' },
+    { id:'nezabudki-pamyati', n:'Незабудки памяти', cat:'Цветы', loc:null, p:990, op:1490, sale:true, g:'https://static.tildacdn.com/tild3339-6161-4464-b932-383965393735/859B7A58-577D-4F9B-9.jpeg', s:'https://static.tildacdn.com/tild3163-3464-4738-a165-666134383935/F2BF5B95-FC44-4696-A.jpeg' },
+    { id:'skripichnyy-klyuch', n:'Скрипичный ключ', cat:'Увлечения', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3638-3638-4939-b564-326430636461/Studio_Session-152__.jpg', s:'https://static.tildacdn.com/tild6664-3762-4634-a638-393861353939/Studio_Session-152__.jpg' },
+    { id:'chashka-kofe', n:'Чашка кофе', cat:'Увлечения', loc:null, p:990, op:1490, sale:true, g:'https://static.tildacdn.com/tild6432-6562-4562-a338-326532363836/Studio_Session-223__.jpg', s:'https://static.tildacdn.com/tild6238-3461-4765-b066-353635343564/Studio_Session-223__.jpg' },
+    { id:'yoga', n:'Йога', cat:'Увлечения', loc:null, p:990, op:1490, sale:true, g:'https://static.tildacdn.com/tild3235-3136-4564-b864-623332346561/Studio_Session-171__.jpg', s:'https://static.tildacdn.com/tild6238-3130-4334-b339-393264663836/Studio_Session-171__.jpg' },
+    { id:'yahta-parus', n:'Яхта, парус...', cat:'Увлечения', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3664-6562-4665-b166-396337383864/Studio_Session-210__.jpg', s:'https://static.tildacdn.com/tild6566-3539-4734-b465-326337323966/Studio_Session-210__.jpg' },
+    { id:'samolet-mechta', n:'Самолет-мечта', cat:'Увлечения', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6535-6134-4331-b330-303531373233/Studio_Session-134__.jpg', s:'https://static.tildacdn.com/tild6566-3164-4363-b761-386662333361/Studio-Session-134__.jpg' },
+    { id:'kaducey', n:'Кадуцей', cat:'Увлечения', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6230-6362-4434-b330-373063663430/Studio_Session-158__.jpg', s:'https://static.tildacdn.com/tild3865-6163-4437-b364-666534323033/Studio_Session-158__.jpg' },
+    { id:'pero-tvorca', n:'Перо творца', cat:'Увлечения', loc:null, p:1490, g:'https://static.tildacdn.com/tild3061-6131-4133-a163-396130613638/PNG_image_5-5.jpg', s:'https://static.tildacdn.com/tild6261-6336-4639-b665-353661316165/PNG_image_5-6.jpg' },
+    { id:'vegetarianec', n:'Вегетарианец', cat:'Увлечения', loc:null, p:990, op:1490, sale:true, brutal:true, g:'https://static.tildacdn.com/tild3365-3264-4165-b430-313236306237/88DF2E18-54A2-4986-A.jpg', s:'https://static.tildacdn.com/tild3364-6537-4565-a266-316466366161/88DF2E18-54A2-4986-A.jpg' },
+    { id:'shampan-prazdnika', n:'Шампань праздника', cat:'Увлечения', loc:null, p:1490, g:'https://static.tildacdn.com/stor6363-6331-4235-a138-656363323632/a94c197aa18c3b068d6b77e7c5f760c0.jpg', s:'https://static.tildacdn.com/stor3462-3435-4335-a235-393631376362/cfb25e9ab3f761e68fa1ab6c0b09818f.jpg' },
+    { id:'sladkaya-zhizn', n:'Сладкая жизнь', cat:'Увлечения', loc:null, p:1490, g:'https://static.tildacdn.com/stor6266-3239-4464-b363-613130346230/9a6f3f4a8283e94d0c6a4e4da76a8762.jpg', s:'https://static.tildacdn.com/stor6438-6236-4330-a333-636238376565/553e8491d668149d6e84ecc83c997276.jpg' },
+    { id:'znak-zodiaka', n:'Знак зодиака', cat:'Зодиак · Буквы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6466-6139-4866-b332-383663643634/1.jpg', s:'https://static.tildacdn.com/tild6466-6139-4866-b332-383663643634/1.jpg' },
+    { id:'bukvy', n:'Буквы', cat:'Зодиак · Буквы', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3532-3334-4362-a533-653935323065/2.jpg', s:'https://static.tildacdn.com/tild3532-3334-4362-a533-653935323065/2.jpg' },
+  ];
+
+  const CATS = ['Удача', 'Защита', 'Любовь', 'Животные', 'Символы', 'Цветы', 'Увлечения', 'Зодиак · Буквы', 'Брутальные'];
+
+  function baseImg(geom, material, color) {
+    return ASSET + 'bracelets/' + geom + '-' + material + '-' + color + '.webp';
+  }
+  function charmCut(plating, loc) {
+    return ASSET + 'charms/' + plating + '/' + loc + '.webp';
+  }
+  function colorsFor(material, geom) {
+    let cols = BASES[material].colors;
+    if (material === 'velvet' && geom.indexOf('single') === 0) {
+      cols = cols.filter(c => VELVET_NO_POWDER_SINGLE.includes(c.id));
+    }
+    return cols;
+  }
+  function charmPrice(charm, plating, geom) {
+    let p = charm.p;                       // gold·10mm
+    if (plating === 'silver') p -= 200;
+    if (geom && geom.indexOf('15') > -1) p += 100;
+    return p;
+  }
+  function charmPriceOld(charm, plating, geom) {
+    if (!charm.op) return 0;
+    let p = charm.op;
+    if (plating === 'silver') p -= 200;
+    if (geom && geom.indexOf('15') > -1) p += 100;
+    return p;
+  }
+  function fmt(n) { return n.toLocaleString('ru-RU') + ' ₽'; }
+
+  // ---- Tilda UID + корзина (восстановлено) ----
+  const CHARM_UID = {
+    "paw":{"silver-10":"365168990346", "gold-10":"874972658694", "silver-15":"670487423902", "gold-15":"430377309766"},
+    "clover":{"gold-10":"137686017560", "gold-15":"572459198264", "silver-15":"390886742227", "silver-10":"248570336943"},
+    "arrow":{"silver-10":"974669223976", "gold-10":"683630355649", "silver-15":"379217570616", "gold-15":"524572919869"},
+    "unicorn":{"silver-10":"296457525740", "gold-10":"331149253330", "silver-15":"140106346261", "gold-15":"606414169567"},
+    "horseshoe":{"silver-10":"769744888159", "gold-10":"269987082454", "silver-15":"860589997685", "gold-15":"901888344047"},
+    "hieroglyph":{"silver-10":"279855223728", "gold-10":"813768448176", "silver-15":"767355802730", "gold-15":"803047864680"},
+    "dragon":{"silver-10":"581936273961", "gold-10":"833309898151", "silver-15":"988267747351", "gold-15":"636024626661"},
+    "shell":{"silver-10":"567901631601", "gold-10":"595991536711", "silver-15":"827415284751", "gold-15":"932506617831"},
+    "krylya-angela":{"silver-10":"847887714831", "gold-10":"126905093441", "silver-15":"865583408724", "gold-15":"758875586596"},
+    "uadzhet-oko-gora":{"silver-15":"155612470020", "gold-15":"218915083941"},
+    "hristianskiy-krest":{"silver-10":"115106080154", "gold-10":"648464635141", "silver-15":"847897153399", "gold-15":"536253323554"},
+    "zvezda-davida":{"silver-10":"525671250379", "gold-10":"366930716938", "silver-15":"541807348924", "gold-15":"996028553860"},
+    "hamsa-ruka-fatimy":{"silver-10":"161150783135", "gold-10":"787335501473", "silver-15":"208909382776", "gold-15":"116158940742"},
+    "yakor-nadezhdy":{"silver-10":"310889573369", "gold-10":"280428163443", "silver-15":"173302352782", "gold-15":"513019118343"},
+    "energiya-solnca":{"silver-10":"556988087851", "gold-10":"627967764085", "silver-15":"590515622700", "gold-15":"903281992165"},
+    "feniks-vechnoy-zhizni":{"silver-10":"174507070191", "gold-10":"671688759891", "silver-15":"997105725311", "gold-15":"773813301711"},
+    "sila-luny":{"silver-10":"783013787652", "gold-10":"555252832082", "silver-15":"446827969762", "gold-15":"258663113832"},
+    "runa-mir":{"silver-10":"878611206382", "gold-10":"884411276822", "silver-15":"135883700352", "gold-15":"317198673812"},
+    "runa-alatyr":{"silver-10":"690801068842", "gold-10":"283619257252", "silver-15":"180579383622", "gold-15":"820688857232"},
+    "runa-bereginya":{"silver-10":"969810899092", "gold-10":"172099145772", "silver-15":"774170556722", "gold-15":"768667517652"},
+    "zamok-na-schaste":{"silver-10":"172416161688", "gold-10":"474500097550", "silver-15":"338874245010", "gold-15":"872548676399"},
+    "klyuch-ot-serdca":{"silver-10":"800283301669", "gold-10":"859160866133", "silver-15":"646964216142", "gold-15":"491693928980"},
+    "serdce-lyubvi":{"silver-10":"355324426133", "gold-10":"237807588438", "silver-15":"400108878443", "gold-15":"843868299196"},
+    "krepkaya-semya":{"silver-10":"460952747491", "gold-10":"726595903784", "silver-15":"882032160385", "gold-15":"542031932372"},
+    "moya-devochka":{"silver-10":"295324900021", "gold-10":"307560756213", "silver-15":"347249433511", "gold-15":"602131750847"},
+    "moy-malchik":{"silver-10":"547037671689", "gold-10":"146387989004", "silver-15":"117984291196", "gold-15":"478686247405"},
+    "lyubimyy-malysh":{"silver-10":"584838322391", "gold-10":"472205077891", "silver-15":"833600932331", "gold-15":"304569764901"},
+    "aist-na-kryshe":{"silver-10":"479072710471", "gold-10":"425970724851", "silver-15":"803948422291", "gold-15":"518176515061"},
+    "svobodnyy-volk":{"silver-15":"815228139501", "gold-15":"848336564649"},
+    "delfiny-radosti":{"silver-10":"229697224877", "gold-10":"962594546302", "silver-15":"713599086375", "gold-15":"505408403692"},
+    "medved-opory":{"silver-15":"443181806157", "gold-15":"638013513930"},
+    "kogti-sily":{"silver-15":"287727606133", "gold-15":"728071979042"},
+    "tigr-dvizheniya":{"silver-15":"704378391616", "gold-15":"731436525718"},
+    "koshka-uyuta":{"silver-10":"672066186764", "gold-10":"498866361589", "silver-15":"673776213468", "gold-15":"963572735631"},
+    "slon-blagopoluchiya":{"silver-10":"553669936456", "gold-10":"640362287795", "silver-15":"346856810247", "gold-15":"165509281574"},
+    "babochka-svobody":{"silver-10":"590675493361", "gold-10":"247807274933", "silver-15":"191227374790", "gold-15":"378136327985"},
+    "sova-mudrosti":{"silver-10":"830389620303", "gold-10":"803139700973", "silver-15":"223001190688", "gold-15":"197888756315"},
+    "lev-haraktera":{"silver-15":"343394205681", "gold-15":"115274224861"},
+    "lastochka-vesny":{"silver-10":"397732191781", "gold-10":"522541216561"},
+    "loshadka-stremleniya":{"silver-10":"223435355911", "gold-10":"126506969351", "silver-15":"987132822361", "gold-15":"184520438621"},
+    "korgi-radosti":{"silver-10":"953146827422", "gold-10":"808598763862", "silver-15":"764643316742", "gold-15":"103341932542"},
+    "chihuahua-vernosti":{"silver-10":"669654623372", "gold-10":"887573078592", "silver-15":"242067293002", "gold-15":"860057993172"},
+    "shpic-nastroeniya":{"silver-10":"256691564202", "gold-10":"610070660532", "silver-15":"995466814932", "gold-15":"481421010222"},
+    "pudel-sharma":{"silver-10":"381237184332", "gold-10":"555055611432", "silver-15":"728041327172", "gold-15":"330777530282"},
+    "rog-odina":{"silver-15":"354955614669", "gold-15":"496687060910"},
+    "oko-mudrosti":{"silver-15":"999472640910", "gold-15":"499104858368"},
+    "koleso-svaroga":{"silver-15":"258819745798", "gold-15":"287760729715"},
+    "beskonechnost":{"silver-10":"756901452282", "gold-10":"155056325228", "silver-15":"932313534129", "gold-15":"646987222129"},
+    "korona-princessy":{"silver-10":"660465149083", "gold-10":"957791084034", "silver-15":"107231277755", "gold-15":"541214704558"},
+    "in-i-yan":{"silver-10":"847410857073", "gold-10":"320760529771", "silver-15":"466422903243", "gold-15":"813911352710"},
+    "vechnaya-spiral":{"silver-10":"104465828311", "gold-10":"292843765091", "silver-15":"391779526121", "gold-15":"449358965821"},
+    "simvol-mira":{"silver-10":"838344524891", "gold-10":"154841349591", "silver-15":"308168454461", "gold-15":"633445930761"},
+    "znak-om":{"silver-10":"360675167692", "gold-10":"821499553192", "silver-15":"621216592902", "gold-15":"733455595152"},
+    "lotos-sveta":{"silver-10":"698732164258", "gold-10":"974294557352", "silver-15":"509737606252", "gold-15":"405207177871"},
+    "paporotnik-sily":{"silver-10":"409869209019", "gold-10":"924142231467", "silver-15":"383800745317", "gold-15":"732964294299"},
+    "roza-haraktera":{"silver-10":"994617875159", "gold-10":"804961923507", "silver-15":"635672039303", "gold-15":"702924569668"},
+    "sakura-momenta":{"silver-10":"194012645653", "gold-10":"202363649229", "silver-15":"443664728789", "gold-15":"711865213427"},
+    "romashka-radosti":{"silver-10":"711679724278", "gold-10":"439937880823", "silver-15":"509337765399", "gold-15":"523950911229"},
+    "kolokolchik-tishiny":{"silver-10":"933139101571", "gold-10":"803911712760", "silver-15":"819885114092", "gold-15":"877659358136"},
+    "mak-vdohnoveniya":{"silver-10":"966119568457", "gold-10":"301930815353", "silver-15":"996082449455", "gold-15":"855937790560"},
+    "nezabudki-pamyati":{"silver-10":"371325615375", "gold-10":"169214181401", "silver-15":"631107024409", "gold-15":"444952420032"},
+    "skripichnyy-klyuch":{"silver-10":"529398491435", "gold-10":"847511314792", "silver-15":"761210198977", "gold-15":"527642682218"},
+    "chashka-kofe":{"silver-10":"675746135690", "gold-10":"242940501553", "silver-15":"877474392066", "gold-15":"525626057386"},
+    "yoga":{"silver-10":"980175940292", "gold-10":"201076398974", "silver-15":"900893779184", "gold-15":"424681137218"},
+    "yahta-parus":{"silver-10":"487044398549", "gold-10":"663002299628", "silver-15":"512482737297", "gold-15":"525789866821"},
+    "samolet-mechta":{"silver-10":"101282991620", "gold-10":"743752885867", "silver-15":"731821019038", "gold-15":"228888519655"},
+    "kaducey":{"silver-10":"236395183285", "gold-10":"853740555231", "silver-15":"926076265252", "gold-15":"795476727128"},
+    "pero-tvorca":{"silver-10":"132893390351", "gold-10":"596182738251", "silver-15":"532227068331", "gold-15":"762707885791"},
+    "vegetarianec":{"silver-10":"467041536351", "gold-10":"950104627381", "silver-15":"409183559651", "gold-15":"560057647481"},
+    "shampan-prazdnika":{"silver-10":"239575323852", "gold-10":"968643771642", "silver-15":"690896239462", "gold-15":"523891527492"},
+    "sladkaya-zhizn":{"silver-10":"797765821162", "gold-10":"908098776452", "silver-15":"420970026242", "gold-15":"589295454602"},
+    "znak-zodiaka":{"silver-10":"327872757001", "gold-10":"543614171871", "silver-15":"881961056331", "gold-15":"826902587121"},
+    "bukvy":{"silver-10":"478230005821", "gold-10":"467340833801", "silver-15":"906453713071", "gold-15":"924926510871"}
   };
-
-  // placed: { [levelId]: [ {charm:UID, plating}, ... ] } — набор надетых шармов по ремешкам
-  const state = { variant:"single-10", material:"leather", color:"black", plating:"gold", category:"Удача", level:0, placed:{} };
-
-  // предзагрузка локальных шармов покрытия — переключение без задержки
-  const preloaded = {};
-  function preloadPlating(pl){
-    if(preloaded[pl]) return; preloaded[pl] = true;
-    CHARMS_FULL.forEach(function(c){ if(c.loc){ const i = new Image(); i.src = charmFull(pl, c.loc); } });
-  }
-
-  // ---- helpers ----
-  const $ = function(id){ return document.getElementById(id); };
-  const fmt = function(n){ return n.toLocaleString("ru-RU") + " ₽"; };
-  function getVariant(){ return VARIANTS.find(function(v){return v.id===state.variant;}); }
-  function getPlating(){ return PLATINGS.find(function(p){return p.id===state.plating;}); }
-  // ---- основа: материал / цвет / картинка / UID ----
-  function availColors(){ // цвета, доступные для текущего материала и геометрии
-    const map = BASES[state.material].uid[state.variant] || {};
-    return BASES[state.material].colors.filter(function(c){ return map[c.id]; });
-  }
-  function ensureColor(){ // держим выбранный цвет валидным при смене материала/геометрии
-    const av = availColors();
-    if(!av.some(function(c){ return c.id===state.color; })) state.color = av.length ? av[0].id : null;
-  }
-  function baseUid(){ const m = BASES[state.material].uid[state.variant] || {}; return m[state.color] || null; }
-  function colorName(){ const c = BASES[state.material].colors.find(function(x){ return x.id===state.color; }); return c ? c.name : state.color; }
-  function braceletSrc(){ return BASE + "bracelets/" + state.variant + "-" + state.material + "-" + state.color + ".webp"; }
-  function baseName(){ // полное название основы для заказа
-    const v = getVariant();
-    const width = v.strap==="15" ? "Широкий" : "Узкий";
-    const mat = state.material==="velvet" ? "бархатный" : "кожаный";
-    const turns = v.charm.levels.length > 1 ? " на два оборота" : "";
-    return width + " " + mat + " браслет" + turns;
-  }
-  function charmById(id){ return CHARM_BY_ID[id]; }
-  function charmName(id){ const c = CHARM_BY_ID[id]; return c ? c.n : id; }
-  // вариант шарма из каталога Tilda по покрытию + ширине текущей основы
-  function charmVariant(charmId, plating){
-    const c = CHARM_BY_ID[charmId];
-    return c ? c.v[plating + "-" + getVariant().strap] : null;
-  }
-  // картинка-превью для палитры: нормализованное локальное превью по покрытию
-  // (loc — у серии «Удача», u+UID — у остальных). Единый размер для всех.
-  function charmThumb(c, plating){ return charmPrev(plating, c.loc || ("u" + c.id)); }
-  // картинка для наложения на браслет (только у локальных шармов)
-  function charmOverlay(charmId, plating){ const c = CHARM_BY_ID[charmId]; return (c && c.loc) ? charmFull(plating, c.loc) : null; }
-  // можно ли надеть шарм на текущую основу (есть локальная картинка и вариант под ширину/покрытие)
-  function charmWearable(charmId){
-    const c = CHARM_BY_ID[charmId];
-    return !!(c && c.loc && c.v[state.plating + "-" + getVariant().strap]);
-  }
-  function charmPrice(charmId, plating){ const e = charmVariant(charmId, plating); return e ? e.p : 0; }
-  function charmsSum(){
-    const v = getVariant(); let sum = 0;
-    v.charm.levels.forEach(function(lv){
-      (state.placed[lv.id] || []).forEach(function(it){ sum += charmPrice(it.charm, it.plating); });
-    });
-    return sum;
-  }
-  function curLevel(){ const v = getVariant(); return v.charm.levels[Math.min(state.level, v.charm.levels.length-1)]; }
-  function slotsFor(lid){ if(!state.placed[lid]) state.placed[lid] = []; return state.placed[lid]; }
-  function totalCharms(){ // только уровни текущей основы
-    const v = getVariant(); let n = 0;
-    v.charm.levels.forEach(function(lv){ n += (state.placed[lv.id] || []).length; });
-    return n;
-  }
-
-  function charmFull(plating, id){ return BASE + "charms/" + plating + "/" + id + ".webp"; }
-  function charmPrev(plating, id){ return BASE + "charms/preview/" + plating + "/" + id + ".webp"; }
-
-  // ---- build controls (единые чипы) ----
-  function chip(label, active, onClick, inner){
-    const b = document.createElement("button");
-    b.className = "chip" + (active ? " active":"");
-    b.type = "button";
-    b.innerHTML = (inner || "") + "<span>" + label + "</span>";
-    b.addEventListener("click", onClick);
-    return b;
-  }
-  function buildTypes(){
-    const wrap = $("types"); wrap.innerHTML = "";
-    VARIANTS.forEach(function(v){
-      const b = chip(v.label, v.id===state.variant, function(){ state.variant=v.id; render(); }, ICONS[v.icon]);
-      b.dataset.id = v.id; wrap.appendChild(b);
-    });
-  }
-  function buildMaterials(){
-    const wrap = $("materials"); wrap.innerHTML = "";
-    Object.keys(BASES).forEach(function(mid){
-      wrap.appendChild(chip(BASES[mid].label, mid===state.material, function(){ state.material=mid; ensureColor(); render(); }));
-    });
-  }
-  function buildPlatings(){
-    const wrap = $("platings"); wrap.innerHTML = "";
-    PLATINGS.forEach(function(p){
-      wrap.appendChild(chip(p.label, p.id===state.plating, function(){ state.plating=p.id; render(); }, '<span class="dot '+p.id+'"></span>'));
-    });
-  }
-  function buildColors(){
-    const wrap = $("colors"); wrap.innerHTML = "";
-    availColors().forEach(function(c){
-      const b = document.createElement("button");
-      b.className = "color-sw" + (c.id===state.color ? " active":"");
-      b.type = "button"; b.title = c.name; b.style.background = c.hex;
-      b.addEventListener("click", function(){ state.color = c.id; render(); });
-      wrap.appendChild(b);
-    });
-  }
-  function buildLevels(){
-    const v = getVariant();
-    const field = $("levelField"), wrap = $("levels");
-    const lvls = v.charm.levels;
-    if(!lvls || lvls.length < 2){ field.hidden = true; wrap.innerHTML = ""; return; }
-    field.hidden = false; wrap.innerHTML = "";
-    lvls.forEach(function(lv, i){
-      wrap.appendChild(chip(lv.label, i===state.level, function(){ state.level=i; render(); }));
-    });
-  }
-  function buildCategories(){
-    const wrap = $("charmCats"); wrap.innerHTML = "";
-    CATEGORIES.forEach(function(cat){
-      const cnt = CHARMS_FULL.filter(function(c){ return c.c.indexOf(cat.id) >= 0; }).length;
-      if(!cnt) return;
-      wrap.appendChild(chip(cat.label, cat.id===state.category, function(){ state.category=cat.id; render(); }));
-    });
-  }
-  function buildCharms(){
-    const wrap = $("charms"); wrap.innerHTML = "";
-    const list = CHARMS_FULL.filter(function(c){ return c.c.indexOf(state.category) >= 0; });
-    list.forEach(function(c){
-      const wear = charmWearable(c.id);
-      const b = document.createElement("button");
-      b.className = "charm-btn" + (wear ? "" : " soon");
-      b.type = "button"; b.dataset.id = c.id;
-      b.title = wear ? ("Добавить: " + c.n) : (c.n + " — фото для примерки скоро");
-      b.innerHTML = '<img loading="lazy" alt="'+c.n+'" src="'+charmThumb(c, state.plating)+'" onerror="this.style.visibility=\'hidden\'"><span class="c-name">'+c.n+'</span>';
-      b.addEventListener("click", function(){ addCharm(c.id); });
-      wrap.appendChild(b);
-    });
-  }
-
-  // ---- надеть / снять шарм ----
-  function addCharm(id){
-    if(!charmWearable(id)){
-      const c = CHARM_BY_ID[id];
-      toast(c && !c.loc ? ("«" + c.n + "»: фото для примерки скоро добавим")
-                        : "Этот шарм недоступен для выбранной ширины основы");
-      return;
-    }
-    const lid = curLevel().id;
-    const arr = slotsFor(lid);
-    if(arr.length >= MAX_CHARMS){
-      toast("На один ремешок — не больше " + MAX_CHARMS + " шармов");
-      return;
-    }
-    arr.push({ charm:id, plating:state.plating });
-    render();
-  }
-  function removeCharm(lid, idx){
-    const arr = slotsFor(lid);
-    arr.splice(idx, 1);
-    render();
-  }
-  function clearCharms(){
-    const lid = curLevel().id;
-    state.placed[lid] = [];
-    render();
-  }
-
-  // позиция центра i-го шарма из n в ряду, % от ширины браслета
-  function charmLeftPct(v, i, n){
-    return v.charm.left + (i - (n-1)/2) * (v.charm.width * CHARM_STEP);
-  }
-
-  // ---- отрисовать надетые шармы на браслете ----
-  function renderCharms(){
-    const v = getVariant();
-    const layer = $("charmsLayer");
-    layer.innerHTML = "";
-    v.charm.levels.forEach(function(lv){
-      const arr = state.placed[lv.id] || [];
-      const n = arr.length;
-      const nodes = [];
-      arr.forEach(function(item, i){
-        const img = document.createElement("img");
-        img.className = "charm-on";
-        img.src = charmOverlay(item.charm, item.plating);
-        img.alt = charmName(item.charm);
-        img.draggable = false;
-        img.style.width = v.charm.width + "%";
-        img.style.top = lv.top + "%";
-        img.style.left = charmLeftPct(v, i, n) + "%";
-        img.title = charmName(item.charm) + " · перетащите, чтобы поменять местами; нажмите, чтобы снять";
-        layer.appendChild(img);
-        nodes.push(img);
-      });
-      nodes.forEach(function(img){ attachCharmPointer(img, lv.id, v, nodes); });
-    });
-  }
-
-  // ---- перетаскивание (поменять местами) + клик (снять) ----
-  function attachCharmPointer(img, levelId, v, nodes){
-    img.addEventListener("pointerdown", function(e){
-      e.preventDefault();
-      const n = nodes.length;
-      const box = $("braceletBox");
-      const boxW = box.clientWidth || 1;
-      const stepPx = v.charm.width * CHARM_STEP / 100 * boxW;
-      const groupCenterPx = v.charm.left / 100 * boxW;
-      const fromIndex = nodes.indexOf(img);
-      const basePx = groupCenterPx + (fromIndex - (n-1)/2) * stepPx;
-      const order = nodes.slice();   // текущий визуальный порядок узлов
-      let curIndex = fromIndex;
-      const startX = e.clientX;
-      let moved = false;
-      try { img.setPointerCapture(e.pointerId); } catch(_){}
-      img.style.transition = "none";
-      img.style.zIndex = "5";
-
-      function onMove(ev){
-        const dx = ev.clientX - startX;
-        if(Math.abs(dx) <= 4) return;
-        moved = true;
-        if(n < 2) return;
-        img.style.transform = "translate(-50%,-50%) translateX(" + dx + "px) scale(1.05)";
-        let target = Math.round((basePx + dx - groupCenterPx) / stepPx + (n-1)/2);
-        target = Math.max(0, Math.min(n-1, target));
-        if(target !== curIndex){
-          order.splice(order.indexOf(img), 1);
-          order.splice(target, 0, img);
-          curIndex = target;
-          order.forEach(function(el, idx){
-            if(el === img) return;
-            el.style.transition = "left .18s ease";
-            el.style.left = charmLeftPct(v, idx, n) + "%";
-          });
-        }
-      }
-      function onUp(){
-        img.removeEventListener("pointermove", onMove);
-        img.removeEventListener("pointerup", onUp);
-        img.removeEventListener("pointercancel", onUp);
-        try { img.releasePointerCapture(e.pointerId); } catch(_){}
-        img.style.zIndex = "";
-        if(!moved){ removeCharm(levelId, fromIndex); return; }   // клик без сдвига = снять
-        // зафиксировать новый порядок
-        const arr = state.placed[levelId] || [];
-        state.placed[levelId] = order.map(function(el){ return arr[nodes.indexOf(el)]; });
-        img.style.transition = ""; img.style.transform = "";
-        render();
-      }
-      img.addEventListener("pointermove", onMove);
-      img.addEventListener("pointerup", onUp);
-      img.addEventListener("pointercancel", onUp);
-    });
-  }
-
-  // ---- render ----
-  let firstRender = true;
-  let renderSeq = 0;
-  function render(){
-    const v = getVariant(), p = getPlating();
-    const myseq = ++renderSeq;
-    if(state.level >= v.charm.levels.length) state.level = 0;
-    ensureColor();
-    preloadPlating(state.plating);
-
-    // перестраиваем элементы выбора (единые чипы)
-    buildTypes();
-    buildMaterials();
-    buildColors();
-    buildPlatings();
-    buildLevels();
-    buildCategories();
-    buildCharms();   // палитра зависит от категории, покрытия и ширины основы
-
-    // stage — браслет + надетые шармы
-    const braceletImg = $("braceletImg");
-    const braceSrc = braceletSrc();
-    if(braceletImg.getAttribute("src") !== braceSrc) braceletImg.src = braceSrc;
-    renderCharms();
-    firstRender = false;
-
-    // labels
-    const multi = v.charm.levels.length > 1;
-    const lvlWord = multi ? v.charm.levels[state.level].label.toLowerCase() + " уровень" : "";
-    const lid = curLevel().id;
-    const onLevel = (state.placed[lid] || []).length;
-    const total = totalCharms();
-    $("pickType").textContent = v.label;
-    $("pickMaterial").textContent = BASES[state.material].label;
-    $("pickColor").textContent = colorName();
-    $("pickLevel").textContent = multi ? v.charm.levels[state.level].label : "";
-    $("pickPlating").textContent = p.label;
-    $("pickCharm").textContent = onLevel + " / " + MAX_CHARMS + (multi ? " на ремешке" : "");
-    $("clearBtn").hidden = onLevel === 0;
-
-    renderSummary(v, multi);
-    postHeight();
-  }
-
-  function renderSummary(v, multi){
-    $("sumType").textContent = v.label;
-    $("sumMaterial").textContent = BASES[state.material].label;
-    $("sumColor").textContent = colorName();
-    const lvlRow = $("sumLevelRow");
-    if(multi){ lvlRow.hidden = false; $("sumLevel").textContent = v.charm.levels[state.level].label; }
-    else lvlRow.hidden = true;
-    const parts = [];
-    v.charm.levels.forEach(function(lv){
-      const arr = state.placed[lv.id] || [];
-      if(!arr.length) return;
-      const names = arr.map(function(it){
-        return charmName(it.charm) + " (" + (it.plating==="gold" ? "зол." : "сер.") + ")";
-      }).join(", ");
-      parts.push(multi ? (lv.label + ": " + names) : names);
-    });
-    $("sumCharm").innerHTML = parts.length ? parts.join("<br>") : "Не выбрано";
-    $("sumPrice").textContent = fmt(v.price + charmsSum());
-  }
-
-  // авто-высота при встраивании через iframe (Tilda слушает это сообщение)
-  function postHeight(){
-    try{
-      const h = document.getElementById("tomaaCfg").scrollHeight;
-      parent.postMessage({ tomaaConfiguratorHeight: h }, "*");
-    }catch(e){}
-  }
-
-  // ---- toast ----
-  let toastT;
-  function toast(msg){
-    const t = $("toast"); t.textContent = msg; t.classList.add("show");
-    clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove("show"); }, 3200);
-  }
-
-  // ---- CTA: добавление в корзину Tilda ----
-  function onOrder(){
-    const v = getVariant();
-    const count = totalCharms();
-    if(count === 0){ toast("Добавьте хотя бы один шарм"); return; }
-    // состав шармов с данными каталога Tilda (UID/цена/вариант)
-    const charms = [];
-    v.charm.levels.forEach(function(lv){
-      (state.placed[lv.id] || []).forEach(function(it){
-        const ent = charmVariant(it.charm, it.plating) || {};
-        charms.push({
-          level: v.charm.levels.length > 1 ? lv.id : null,
-          charm: it.charm,
-          name: charmName(it.charm),
-          plating: it.plating, strap: v.strap,
-          uid: ent.u || null, price: ent.p || 0,
-        });
-      });
-    });
-    const base = {
-      name: baseName(), colorName: colorName(),
-      uid: baseUid(), price: v.price,
-      variant: state.variant, material: state.material, color: state.color,
-    };
-    const order = {
-      base: base, charms: charms, count: count,
-      total: v.price + charmsSum(),
-    };
-    const ok = addToTildaCart(base, charms);
-    document.dispatchEvent(new CustomEvent("tomaa:order", { detail: order }));
-    console.log("TOMAA order →", order);
-    toast(ok ? ("В корзину: основа + шармов " + count) : ("Собрано: основа + шармов " + count + " — " + fmt(order.total)));
-  }
-
-  // Добавляет основу и каждый шарм в корзину Tilda Store по Tilda UID.
-  // Работает, когда конфигуратор встроен в страницу tomaa.ru (где есть Tilda-корзина).
-  function addToTildaCart(base, charms){
-    if(typeof window.tcart__addProduct !== "function"){
-      console.warn("[TOMAA] Корзина Tilda не найдена (tcart__addProduct). Состав передан в событии tomaa:order.");
-      return false;
-    }
-    if(base.uid){
-      window.tcart__addProduct({
-        name: base.name + " - " + base.colorName,
-        price: base.price, quantity: 1, uid: base.uid,
-        single: "0", portion: 1, fakeProduct: false, options: []
-      });
-    }
-    charms.forEach(function(c){
-      if(!c.uid) return;
-      window.tcart__addProduct({
-        name: "Шарм: " + c.name + " - " + (c.plating==="gold" ? "Золото" : "Серебро") +
-              " - Для " + (c.strap==="15" ? "широких браслетов 15 мм" : "узких браслетов 10 мм"),
-        price: c.price, quantity: 1, uid: c.uid,
-        single: "0", portion: 1, fakeProduct: false, options: []
-      });
-    });
-    if(typeof window.tcart__reDrawCartIcon === "function") window.tcart__reDrawCartIcon();
-    if(typeof window.tcart__openCart === "function") window.tcart__openCart();
+  const BASE_UID = {"leather": {"single-10": {"black": "499893929107", "brown": "511088007241", "bordo": "126301853054", "red": "337333807816", "powder": "866340107950", "white": "194120936060"}, "double-10": {"black": "978556527815", "brown": "379370772601", "bordo": "948346445121", "red": "810575764121", "powder": "944898996977", "white": "773832198537"}, "single-15": {"black": "739078171412", "brown": "455378210635", "bordo": "896696482655", "red": "442148015498", "powder": "553003999997", "white": "325169053821"}, "double-15": {"black": "813599264135", "brown": "204696326191", "bordo": "742336589861", "red": "236944001429", "powder": "127830960976", "white": "818018977038"}}, "velvet": {"single-10": {"blue": "369234778431", "ruby": "241905289651", "turquoise": "313809356783", "grey": "514794891668", "orange": "603770606311"}, "single-15": {"turquoise": "171058017879", "blue": "800650339562", "ruby": "317941020767", "orange": "535161758101", "grey": "612497583787"}, "double-15": {"ruby": "839075101271", "turquoise": "936637834651", "blue": "608148944271", "orange": "936504493021", "powder": "801960385471", "grey": "799223805881"}, "double-10": {"ruby": "989760712521", "turquoise": "155948583361", "blue": "412235426011", "orange": "503731116181", "powder": "552807232031", "grey": "310966862741"}}};
+  function charmUid(charmId, plating, geom){ var w = geom.indexOf('15')>-1?'15':'10'; var m=CHARM_UID[charmId]; return m?m[plating+'-'+w]:null; }
+  function baseUid(geom, material, color){ var m=BASE_UID[material]&&BASE_UID[material][geom]; return m?m[color]:null; }
+  function baseName(sel){ var v=sel.variant; var width=v.sub==='15 мм'?'Широкий':'Узкий'; var mat=sel.material==='velvet'?'бархатный':'кожаный'; var turns=v.id.indexOf('double')===0?' на два оборота':''; var cn=(BASES[sel.material].colors.find(function(c){return c.id===sel.color;})||{}).name||''; return width+' '+mat+' браслет'+turns+(cn?' - '+cn:''); }
+  function charmCartName(ch, pl, geom){ var w=geom.indexOf('15')>-1?'широких браслетов 15 мм':'узких браслетов 10 мм'; return 'Шарм: '+ch.n+' - '+(pl==='gold'?'Золото':'Серебро')+' - Для '+w; }
+  function addToCart(sel){
+    var geom=sel.variant.id;
+    var hasCart = typeof window.tcart__addProduct==='function';
+    var order={ base:baseName(sel), baseUid:baseUid(geom,sel.material,sel.color), basePrice:sel.variant.base, charms:[] };
+    sel.placed.forEach(function(c){ var ch=CHARMS.find(function(x){return x.id===c.id;}); if(!ch) return; order.charms.push({ name:charmCartName(ch,c.pl,geom), uid:charmUid(c.id,c.pl,geom), price:charmPrice(ch,c.pl,geom) }); });
+    document.dispatchEvent(new CustomEvent('tomaa:order',{detail:order}));
+    if(!hasCart){ console.warn('[TOMAA] Корзина Tilda не найдена (tcart__addProduct). Состав в событии tomaa:order.'); return false; }
+    if(order.baseUid) window.tcart__addProduct({ name:order.base, price:order.basePrice, quantity:1, uid:order.baseUid, single:"0", portion:1, fakeProduct:false, options:[] });
+    order.charms.forEach(function(c){ if(!c.uid) return; window.tcart__addProduct({ name:c.name, price:c.price, quantity:1, uid:c.uid, single:"0", portion:1, fakeProduct:false, options:[] }); });
+    if(typeof window.tcart__reDrawCartIcon==='function') window.tcart__reDrawCartIcon();
+    if(typeof window.tcart__openCart==='function') window.tcart__openCart();
     return true;
   }
 
-  // ---- init ----
-  render();
-  $("cta").addEventListener("click", onOrder);
-  $("clearBtn").addEventListener("click", clearCharms);
-  window.addEventListener("load", postHeight);
-  window.addEventListener("resize", postHeight);
+  window.TOMAA = {
+    ASSET, BASES, VARIANTS, CHARMS, CATS, MAX_CHARMS, CHARM_STEP,
+    baseImg, charmCut, colorsFor, charmPrice, charmPriceOld, fmt, addToCart,
+  };
+})();
 
+</script>
+
+<script type="text/babel">
+/* TOMAA configurator — redesigned. window.Configurator(mode, annotate) */
+(function () {
+  const { useState, useEffect, useRef, useCallback } = React;
+  const h = React.createElement;
+  const T = window.TOMAA;
+  const KEY = 'tomaa-redesign-cfg-v2';
+
+  // placed: array of { id, p } — p is per-charm plating ('gold' | 'silver')
+  const DEFAULT = { material: 'leather', geom: 'single-10', color: 'black', addPlating: 'gold', addLevel: 'top', placed: [{ id: 'clover', p: 'gold' }, { id: 'paw', p: 'silver' }], cat: 'Удача' };
+  function load() {
+    let s;
+    try { s = Object.assign({}, DEFAULT, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return Object.assign({}, DEFAULT); }
+    // normalise legacy shapes (string ids / global plating)
+    const def = s.addPlating || s.plating || 'gold';
+    s.addPlating = def;
+    s.addLevel = s.addLevel || 'top';
+    s.placed = (s.placed || []).map((e) => typeof e === 'string' ? { id: e, p: def, level: 'top' } : { id: e.id, p: e.p || def, level: e.level || 'top' }).filter((e) => e.id);
+    delete s.plating;
+    return s;
+  }
+  const save = (n) => { localStorage.setItem(KEY, JSON.stringify(n)); return n; };
+  const isDoubleGeom = (g) => g.indexOf('double') === 0;
+  const clampX = (x, w) => Math.max(w / 2 + 4, Math.min(100 - (w / 2 + 4), x));
+
+  // ----- small svgs -----
+  const geomIcon = {
+    'single-10': h('svg', { width: 26, height: 15, viewBox: '0 0 52 30', fill: 'currentColor' }, h('rect', { x: 2, y: 12, width: 48, height: 6, rx: 3 })),
+    'double-10': h('svg', { width: 26, height: 15, viewBox: '0 0 52 30', fill: 'currentColor' }, h('rect', { x: 2, y: 7, width: 48, height: 5, rx: 2.5 }), h('rect', { x: 2, y: 18, width: 48, height: 5, rx: 2.5 })),
+    'single-15': h('svg', { width: 26, height: 15, viewBox: '0 0 52 30', fill: 'currentColor' }, h('rect', { x: 2, y: 9, width: 48, height: 12, rx: 6 })),
+    'double-15': h('svg', { width: 26, height: 15, viewBox: '0 0 52 30', fill: 'currentColor' }, h('rect', { x: 2, y: 4, width: 48, height: 9, rx: 4.5 }), h('rect', { x: 2, y: 17, width: 48, height: 9, rx: 4.5 })),
+  };
+  const Check = h('svg', { width: 12, height: 12, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' }, h('path', { d: 'm5 12 4 4 10-11' }));
+  const Plus = h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.4, strokeLinecap: 'round' }, h('path', { d: 'M12 5v14M5 12h14' }));
+  const Cart = h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, h('circle', { cx: 9, cy: 21, r: 1 }), h('circle', { cx: 20, cy: 21, r: 1 }), h('path', { d: 'M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6' }));
+  const Spark = h('svg', { width: 11, height: 11, viewBox: '0 0 24 24', fill: '#14110f' }, h('path', { d: 'M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z' }));
+  const ArrowUp = h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }, h('path', { d: 'M12 19V5M6 11l6-6 6 6' }));
+  const ArrowDown = h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' }, h('path', { d: 'M12 5v14M6 13l6 6 6-6' }));
+  const lvlIcon = { top: ArrowUp, bottom: ArrowDown };
+
+  function Configurator({ mode, annotate }) {
+    const A = window.AUDIT;
+    const [st, setStRaw] = useState(load);
+    const [pin, setPin] = useState(null);
+    const appRef = useRef(null);
+    const boxRef = useRef(null);
+    const [dragId, setDragId] = useState(null);
+    const [dragPos, setDragPos] = useState(null);
+    const mobile = mode === 'mobile';
+    const setSt = useCallback((patch) => setStRaw((s) => save(Object.assign({}, s, patch))), []);
+
+    const variant = T.VARIANTS.find((v) => v.id === st.geom) || T.VARIANTS[0];
+    const colors = T.colorsFor(st.material, st.geom);
+
+    useEffect(() => { if (!colors.some((c) => c.id === st.color)) setSt({ color: colors[0].id }); }, [st.material, st.geom]);
+    useEffect(() => { if (!annotate) setPin(null); }, [annotate]);
+    useEffect(() => {
+      if (!pin) return;
+      const close = () => setPin(null);
+      window.addEventListener('scroll', close, true);
+      window.addEventListener('resize', close);
+      return () => { window.removeEventListener('scroll', close, true); window.removeEventListener('resize', close); };
+    }, [pin]);
+
+    const isDouble = st.geom.indexOf('double') === 0;
+    const maxCharms = isDouble ? 10 : 5;
+    const maxPerRow = 5;
+    // resolve placed entries → charm + its plating + level
+    const placedCharms = st.placed.map((e) => { const c = T.CHARMS.find((x) => x.id === e.id); return c ? Object.assign({}, c, { pl: e.p, level: e.level || 'top' }) : null; }).filter(Boolean);
+    const charmsTotal = placedCharms.reduce((s, c) => s + T.charmPrice(c, c.pl, st.geom), 0);
+    const total = variant.base + charmsTotal;
+    const nC = placedCharms.length;
+    const full = nC >= maxCharms;
+    const isPlaced = (id) => st.placed.some((e) => e.id === id);
+
+    const toggleCharm = (id) => setStRaw((s) => {
+      let placed;
+      if (s.placed.some((e) => e.id === id)) placed = s.placed.filter((e) => e.id !== id);
+      else {
+        const dbl = s.geom.indexOf('double') === 0;
+        if (s.placed.length >= (dbl ? 10 : 5)) return s;
+        let level = 'top';
+        if (dbl) {
+          const bottomN = s.placed.filter((e) => (e.level || 'top') === 'bottom').length;
+          level = bottomN < maxPerRow ? 'bottom' : 'top'; // default to bottom row, overflow to top
+        }
+        placed = s.placed.concat({ id, p: s.addPlating, level });
+      }
+      return save(Object.assign({}, s, { placed }));
+    });
+    const flipCharm = (id, p) => setStRaw((s) => save(Object.assign({}, s, { placed: s.placed.map((e) => e.id === id ? Object.assign({}, e, { p }) : e) })));
+    const setLevel = (id, level) => setStRaw((s) => save(Object.assign({}, s, { placed: s.placed.map((e) => e.id === id ? Object.assign({}, e, { level }) : e) })));
+
+    const openPin = (n, el) => {
+      const r = el.getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight, pw = 288, ph = 210;
+      let left = r.right + 12; if (left + pw > vw - 10) left = r.left - pw - 12; if (left < 10) left = 10;
+      let top = r.top - 6; if (top + ph > vh - 10) top = Math.max(10, vh - ph - 10);
+      setPin({ n, pos: { position: 'fixed', left, top, zIndex: 60 } });
+    };
+    const PinAt = (n, style) => annotate ? h(A.Pin, { key: 'p' + n, n, style: Object.assign({ position: 'absolute' }, style), active: pin && pin.n === n, onOpen: openPin }) : null;
+
+    // ----- stage ----- (centred rows; drag to reorder / move between rows, snaps back to centre)
+    const baseUrl = T.baseImg(st.geom, st.material, st.color);
+    const w = variant.width, step = w * T.CHARM_STEP;
+    const yFor = { top: 22, bottom: 76, mid: 48 };
+    const onCharmDown = (e, c) => {
+      e.preventDefault(); e.stopPropagation();
+      const box = boxRef.current; if (!box) return;
+      const startX = e.clientX, startY = e.clientY;
+      let moved = false;
+      const move = (ev) => {
+        if (!moved) {
+          if (Math.abs(ev.clientX - startX) < 4 && Math.abs(ev.clientY - startY) < 4) return;
+          moved = true; setDragId(c.id);
+        }
+        const r = box.getBoundingClientRect();
+        const px = clampX((ev.clientX - r.left) / r.width * 100, w);
+        const lv = isDouble ? ((ev.clientY - r.top) < r.height / 2 ? 'top' : 'bottom') : 'top';
+        setStRaw((s) => {
+          const dragged = s.placed.find((pe) => pe.id === c.id); if (!dragged) return s;
+          const others = s.placed.filter((pe) => pe.id !== c.id);
+          let tlv = isDouble ? lv : 'top';
+          // keep max 5 per row — if target row is full, stay in the current row
+          if (isDouble && tlv !== (dragged.level || 'top') && others.filter((pe) => (pe.level || 'top') === tlv).length >= maxPerRow) tlv = dragged.level || 'top';
+          const row = isDouble ? others.filter((pe) => (pe.level || 'top') === tlv) : others;
+          const rest = isDouble ? others.filter((pe) => (pe.level || 'top') !== tlv) : [];
+          const n = row.length + 1, start = 50 - step * (n - 1) / 2;
+          let idx = Math.round((px - start) / step); idx = Math.max(0, Math.min(row.length, idx));
+          const nd = Object.assign({}, dragged, { level: isDouble ? tlv : (dragged.level || 'top') });
+          const newRow = row.slice(); newRow.splice(idx, 0, nd);
+          return save(Object.assign({}, s, { placed: rest.concat(newRow) }));
+        });
+        setDragPos({ x: px });
+      };
+      const up = () => {
+        window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up);
+        setDragId(null); setDragPos(null);
+        if (!moved) toggleCharm(c.id);
+      };
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up);
+    };
+    const charmImg = (c, left, topPct) => {
+      const dragging = dragId === c.id, med = !c.loc;
+      const x = (dragging && dragPos) ? dragPos.x : left;
+      const style = { left: x + '%', top: topPct + '%', width: w + '%' };
+      if (med) style['--ring'] = c.pl === 'gold' ? '#c2933f' : '#9aa0a6';
+      return h('img', {
+        key: c.id, draggable: false, onPointerDown: (ev) => onCharmDown(ev, c),
+        title: 'Нажмите, чтобы убрать · перетащите, чтобы переставить',
+        className: 'charm' + (med ? ' medallion' : '') + (dragging ? ' dragging' : ''),
+        src: med ? (c.pl === 'gold' ? c.g : c.s) : T.charmCut(c.pl, c.loc), alt: '', style,
+      });
+    };
+    const layoutRow = (arr, y) => { const n = arr.length, start = 50 - step * (n - 1) / 2; return arr.map((c, i) => charmImg(c, start + i * step, y)); };
+    const charmEls = isDouble
+      ? [].concat(layoutRow(placedCharms.filter((c) => c.level === 'top'), yFor.top), layoutRow(placedCharms.filter((c) => c.level === 'bottom'), yFor.bottom))
+      : layoutRow(placedCharms, yFor.mid);
+
+    const stage = h('div', { className: 'stage' },
+      PinAt(1, { top: 14, right: 14 }),
+      h('p', { className: 'stage-eyebrow' }, 'TOMAA · соберите свой браслет'),
+      h('div', { className: 'stage-figure' },
+        h('div', { className: 'bracelet-box', ref: boxRef },
+          h('img', { className: 'bracelet-img', src: baseUrl, alt: 'Браслет ' + variant.label }),
+          h('img', { className: 'bracelet-reflect', src: baseUrl, alt: '', 'aria-hidden': true }),
+          charmEls,
+        )),
+      h('div', { className: 'stage-foot', style: { justifyContent: 'space-between' } },
+        nC ? h('span', { className: 'stage-legend' },
+          h('span', { className: 'sp' }, h('svg', { width: 13, height: 13, viewBox: '0 0 24 24', fill: 'none', stroke: '#14110f', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, h('path', { d: 'M5 9l-3 3 3 3M19 9l3 3-3 3M9 5l3-3 3 3M9 19l3 3 3-3M2 12h20M12 2v20' })) ),
+          isDouble ? 'тяните между рядами и по порядку · клик убирает шарм' : 'тяните, чтобы переставить · клик убирает шарм')
+          : h('span', { className: 'stage-legend' }, h('span', { className: 'sp' }, Spark), 'добавьте шармы справа'),
+        h('span', { className: 'count-pill' }, h('b', null, nC), ' / ' + maxCharms + ' шармов'),
+      ),
+    );
+
+    // ----- step 01: base -----
+    const matBtn = (id) => h('button', { className: st.material === id ? 'on' : '', 'aria-pressed': st.material === id, onClick: () => setSt({ material: id }) }, T.BASES[id].label);
+    const geomCard = (v) => h('div', { key: v.id, style: { position: 'relative', display: 'flex', height: '100%' } },
+      h('button', {
+        className: 'geom' + (st.geom === v.id ? ' on' : '') + (v.soon ? ' soon' : ''),
+        'aria-pressed': st.geom === v.id, 'aria-disabled': v.soon, disabled: v.soon,
+        onClick: () => { if (!v.soon) setSt({ geom: v.id }); },
+      },
+        v.soon ? h('span', { className: 'badge' }, 'Скоро') : h('span', { className: 'check' }, Check),
+        h('span', { className: 'gl' }, v.label, h('span', { className: 'gsz' }, v.sub)),
+        h('span', { className: 'gp' }, T.fmt(v.base)),
+      ),
+    );
+    const colorName = (colors.find((c) => c.id === st.color) || colors[0]).name;
+    const step1 = h('div', { className: 'step', style: { position: 'relative' } },
+      PinAt(2, { top: 20, right: 16 }),
+      h('div', { className: 'step-head' }, h('span', { className: 'step-no' }, '01'), h('h3', { className: 'step-title' }, 'Основа'), h('span', { className: 'step-hint' }, 'основа браслета')),
+      h('div', { className: 'field', style: { position: 'relative' } }, PinAt(8, { top: 18, right: 0 }), h('p', { className: 'field-lab' }, 'Материал'), h('div', { className: 'matseg' }, matBtn('leather'), matBtn('velvet'))),
+      h('div', { className: 'field' }, h('p', { className: 'field-lab' }, 'Форма'), h('div', { className: 'geoms' }, T.VARIANTS.map(geomCard))),
+      h('div', { className: 'field', style: { position: 'relative', marginBottom: 4 } },
+        PinAt(3, { top: -4, right: 0 }),
+        h('p', { className: 'field-lab' }, 'Цвет', h('span', { className: 'val' }, colorName)),
+        h('div', { className: 'sws' }, colors.map((c) => h('button', {
+          key: c.id, className: 'sw' + (st.color === c.id ? ' on' : ''), style: { background: c.hex },
+          'aria-pressed': st.color === c.id, 'aria-label': c.name, title: c.name, onClick: () => setSt({ color: c.id }),
+        }))),
+      ),
+    );
+
+    // ----- step 02: charms -----
+    const visible = T.CHARMS.filter((c) => st.cat === 'Брутальные' ? c.brutal : c.cat === st.cat);
+    const finBtn = (p, label) => h('button', { className: st.addPlating === p ? 'on' : '', 'aria-pressed': st.addPlating === p, onClick: () => setSt({ addPlating: p }) }, h('span', { className: 'dot ' + p }), label);
+    const charmCard = (c) => {
+      const on = isPlaced(c.id);
+      const disabled = !on && full;
+      const photo = st.addPlating === 'gold' ? c.g : c.s;
+      return h('button', {
+        key: c.id, className: 'ccard' + (on ? ' on' : '') + (disabled ? ' disabled' : ''),
+        'aria-pressed': on, 'aria-disabled': disabled, onClick: () => toggleCharm(c.id),
+      },
+        h('span', { className: 'add' }, on ? Check : Plus),
+        c.loc ? h('span', { className: 'cut', title: 'Примерка на браслете' }, Spark) : null,
+        h('span', { className: 'ph', style: { backgroundImage: 'url(' + photo + ')' } }),
+        h('span', { className: 'cn' }, c.n),
+        h('span', { className: 'cp' },
+          c.sale ? h('s', { className: 'cp-old' }, T.fmt(T.charmPriceOld(c, st.addPlating, st.geom))) : null,
+          T.fmt(T.charmPrice(c, st.addPlating, st.geom))),
+      );
+    };
+    const finDot = (c, p) => h('button', {
+      className: 'fdot ' + p + (c.pl === p ? ' on' : ''), 'aria-pressed': c.pl === p,
+      'aria-label': (p === 'gold' ? 'Золото' : 'Серебро') + ' — ' + c.n, title: p === 'gold' ? 'Золото' : 'Серебро',
+      onClick: () => flipCharm(c.id, p),
+    });
+    const lvlDot = (c, lv) => h('button', {
+      className: 'ldot' + (c.level === lv ? ' on' : ''), 'aria-pressed': c.level === lv,
+      'aria-label': (lv === 'top' ? 'Верхний ряд' : 'Нижний ряд') + ' — ' + c.n, title: lv === 'top' ? 'Верхний ряд' : 'Нижний ряд',
+      onClick: () => setLevel(c.id, lv),
+    }, lvlIcon[lv]);
+    const step2 = h('div', { className: 'step', style: { position: 'relative' } },
+      PinAt(5, { top: 20, right: 16 }),
+      h('div', { className: 'step-head' }, h('span', { className: 'step-no' }, '02'), h('h3', { className: 'step-title' }, 'Шармы'), h('span', { className: 'step-hint' }, nC + ' из ' + maxCharms)),
+      h('div', { className: 'cats', role: 'tablist', 'aria-label': 'Категории' }, T.CATS.map((cat) => h('button', { key: cat, role: 'tab', 'aria-selected': st.cat === cat, className: 'cat' + (st.cat === cat ? ' on' : ''), onClick: () => setSt({ cat }) }, cat))),
+      h('div', { className: 'finrow', style: { position: 'relative' } },
+        PinAt(4, { top: -10, right: 0 }),
+        h('div', null,
+          h('div', { className: 'finrow-lab' }, 'Выберите покрытие шарма'),
+          h('div', { className: 'finrow-hint' }, 'Любой шарм может быть в цвете золото или серебро.')),
+        h('div', { className: 'plating small', role: 'group', 'aria-label': 'Покрытие добавляемого шарма' }, finBtn('gold', 'Золото'), finBtn('silver', 'Серебро')),
+      ),
+      h('div', { className: 'charms' }, visible.map(charmCard)),
+    );
+
+    // ----- bottom bar -----
+    const golds = placedCharms.filter((c) => c.pl === 'gold').length, silvers = nC - golds;
+    const finPart = nC ? ' · ' + (golds && silvers ? golds + ' зол. / ' + silvers + ' сер.' : nC + ' ' + (golds ? 'зол.' : 'сер.')) : '';
+    const bbLine = variant.label + ' · ' + T.BASES[st.material].label.toLowerCase() + ' · ' + colorName.toLowerCase() + ' · ' + nC + ' шарм.' + finPart;
+    const bottombar = h('div', { className: 'bottombar', style: { position: 'relative' } },
+      PinAt(6, { top: -11, left: 14 }),
+      h('div', { className: 'bb-summary' },
+        h('div', { className: 'bb-line' }, h('b', null, 'Ваш браслет: '), bbLine)),
+      h('div', { className: 'bb-price-wrap' }, h('span', { className: 'bb-price-lab' }, 'Итого'), h('span', { className: 'bb-price' }, T.fmt(total))),
+      h('button', { className: 'cta', onClick: () => T.addToCart({ variant: variant, material: st.material, color: st.color, placed: placedCharms }) }, Cart, mobile ? 'В корзину · ' + T.fmt(total) : 'Добавить в корзину'),
+    );
+
+    return h('div', { className: 'app', ref: appRef, onClick: () => setPin(null) },
+      mobile ? h('div', { className: 'notch' }) : null,
+      h('div', { className: 'app-body' }, stage, h('div', { className: 'panel' }, step1, step2)),
+      bottombar,
+      pin ? h(A.AnnPanel, { n: pin.n, pos: pin.pos, onClose: () => setPin(null) }) : null,
+    );
+  }
+
+  window.Configurator = Configurator;
+})();
+
+</script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+const Configurator = window.Configurator;
+
+// Production embed: just the configurator, no audit chrome.
+// Wide → stage left / panel right. Narrow → stacked, no phone frame.
+function Embed() {
+  const [compact, setCompact] = useState(window.innerWidth < 760);
+  useEffect(() => {
+    const onResize = () => setCompact(window.innerWidth < 760);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return (
+    <div className="embed">
+      <div className={'device ' + (compact ? 'compact' : 'wide')}>
+        <Configurator mode={compact ? 'mobile' : 'desktop'} annotate={false} />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Embed />);
+
+// ---- auto-height for Tilda iframe embed (matches tilda-embed.html) ----
+(function () {
+  let lastH = 0;
+  function postHeight() {
+    const hh = Math.ceil(document.documentElement.scrollHeight);
+    if (hh && hh !== lastH) { lastH = hh; try { parent.postMessage({ tomaaConfiguratorHeight: hh }, '*'); } catch (e) {} }
+  }
+  const root = document.getElementById('root');
+  if (window.ResizeObserver) { new ResizeObserver(postHeight).observe(root); }
+  window.addEventListener('load', postHeight);
+  window.addEventListener('resize', postHeight);
+  setTimeout(postHeight, 400);
+  setInterval(postHeight, 1500);
 })();
 </script>
 </body>
