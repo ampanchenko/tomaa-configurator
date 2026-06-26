@@ -265,9 +265,9 @@ html, body { height: 100%; }
 body { background: #fff; margin: 0; }
 #root { height: 100%; }
 
-.embed { height: 100%; }
+.embed { height: 100%; display: flex; align-items: center; justify-content: center; }
 .device { transition: none; height: 100%; }
-.device.wide { max-width: 1180px; margin: 0 auto; }
+.device.wide { width: 100%; max-width: 1180px; height: 100%; max-height: 800px; margin: 0 auto; }
 
 /* flat shell that fills the viewport; internal scroll, no page scroll */
 .app { height: 100%; min-height: 520px; border: none; border-radius: 0; box-shadow: none; overflow: hidden; }
@@ -275,8 +275,10 @@ body { background: #fff; margin: 0; }
 .notch { display: none !important; }
 .bb-price { white-space: nowrap; }
 
-/* wide: left stage fixed full-height, ONLY the options panel scrolls */
-.device.wide .stage { flex: 0 0 44%; }
+/* wide: capped, centered working zone reads as a contained panel (not a
+   stretched empty field on tall screens); left stage fixed, only panel scrolls */
+.device.wide .app { border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 30px 60px -40px rgba(20,17,15,.4); }
+.device.wide .stage { flex: 0 0 40%; }
 .panel { min-height: 0; max-height: none; overflow-y: auto; }
 
 /* bottom bar pinned at the foot of the fixed column, always visible */
