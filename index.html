@@ -276,9 +276,10 @@ body { background: #fff; margin: 0; }
 .notch { display: none !important; }
 .bb-price { white-space: nowrap; }
 
-/* wide: keep the bracelet preview in view while the long panel scrolls */
+/* wide: stage becomes a full-height left panel that stays in view while the
+   long charm panel scrolls beside it — balanced columns, preview always visible */
 .device.wide .app-body { align-items: flex-start; }
-.device.wide .stage { position: sticky; top: 0; align-self: flex-start; min-height: 440px; }
+.device.wide .stage { position: sticky; top: 0; align-self: flex-start; height: 100vh; min-height: 560px; }
 
 /* keep price + «В корзину» reachable as a floating bar during scroll */
 .bottombar { box-shadow: 0 -12px 26px -20px rgba(20,17,15,.5); }
