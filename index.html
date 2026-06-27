@@ -267,7 +267,7 @@ body { background: #fff; margin: 0; }
 
 .embed { height: 100%; display: flex; align-items: center; justify-content: center; }
 .device { transition: none; height: 100%; }
-.device.wide { width: 100%; max-width: 1180px; height: 100%; max-height: 800px; margin: 0 auto; }
+.device.wide { width: 100%; max-width: 1180px; height: 100%; max-height: 720px; margin: 0 auto; }
 
 /* flat shell that fills the viewport; internal scroll, no page scroll */
 .app { height: 100%; min-height: 520px; border: none; border-radius: 0; box-shadow: none; overflow: hidden; }
@@ -347,7 +347,8 @@ body { background: #fff; margin: 0; }
   const CHARM_STEP = 0.92; // spacing between charms × charm width
 
   // ---- Charms (full catalogue from store export, 73 SKUs) ----
-  // loc → 8 charms have gold/silver transparent webp that mounts live on the strap.
+  // loc → 8 charms have gold/silver transparent webp on the CDN that mounts live on the strap.
+  // cut → local PNG cut-out (assets/charms/<id>.png) that mounts live on the strap (gold art; silver is rendered with a desaturating filter).
   // g / s → studio photo (gold / silver) for the picker + medallion fallback.
   // p → gold·10mm price; silver = p−200, +100 for 15 mm (handled at runtime).
   // op → old (pre-sale) gold·10mm price, struck through when sale:true.
@@ -361,18 +362,18 @@ body { background: #fff; margin: 0; }
     { id:'hieroglyph', n:'Счастье, японский иероглиф', cat:'Удача', loc:'hieroglyph', p:1490, g:'https://static.tildacdn.com/tild6339-6134-4331-b337-633963636462/Studio_Session-217__.jpeg', s:'https://static.tildacdn.com/tild3565-3831-4630-a133-616231343061/Studio_Session-217__.jpeg' },
     { id:'dragon', n:'Дракон благополучия', cat:'Удача', loc:'dragon', p:1490, brutal:true, g:'https://static.tildacdn.com/tild3832-3834-4463-b465-303465616361/WhatsApp_Image_2021-.jpg', s:'https://static.tildacdn.com/tild3864-6262-4637-b030-366534373035/WhatsApp_Image_2021-.jpg' },
     { id:'shell', n:'Талисман-ракушка', cat:'Удача', loc:'shell', p:990, g:'https://static.tildacdn.com/tild6363-3838-4838-b065-616632303462/__2.jpg', s:'https://static.tildacdn.com/tild3663-6463-4833-a338-383464353335/_silver_2.jpg' },
-    { id:'krylya-angela', n:'Крылья ангела', cat:'Защита', loc:null, p:1490, g:'https://static.tildacdn.com/tild3464-3135-4630-b461-393362316231/Studio_Session-129__.jpg', s:'https://static.tildacdn.com/tild3334-3231-4530-b765-643065616665/Studio_Session-129__.jpg' },
-    { id:'uadzhet-oko-gora', n:'Уаджет, око Гора', cat:'Защита', loc:null, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6464-3036-4937-b433-396630323735/Studio_Session-208__.jpg', s:'https://static.tildacdn.com/tild3066-6364-4432-b063-363234333535/Studio_Session-208__.jpg' },
-    { id:'hristianskiy-krest', n:'Христианский крест', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3436-3666-4937-a232-386636653233/Studio_Session-183__.jpg', s:'https://static.tildacdn.com/tild6134-6163-4237-b863-346635613863/Studio_Session-183__.jpg' },
-    { id:'zvezda-davida', n:'Звезда Давида', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3430-3238-4131-b235-643338373365/Studio_Session-176__.jpg', s:'https://static.tildacdn.com/tild3939-6137-4562-b438-343637363337/Studio_Session-176__.jpg' },
-    { id:'hamsa-ruka-fatimy', n:'Хамса, рука Фатимы', cat:'Защита', loc:null, p:1490, g:'https://static.tildacdn.com/tild3333-6431-4832-a632-353636653838/Studio_Session-231__.jpg', s:'https://static.tildacdn.com/tild3532-3435-4035-b861-303332333462/Studio_Session-231__.jpg' },
-    { id:'yakor-nadezhdy', n:'Якорь надежды', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3536-3763-4935-a437-336139636434/Studio_Session-197__.jpg', s:'https://static.tildacdn.com/tild3439-3063-4735-b532-303436316262/Studio_Session-197__.jpg' },
-    { id:'energiya-solnca', n:'Энергия солнца', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6634-3832-4335-a435-366532663866/Studio_Session-141__.jpg', s:'https://static.tildacdn.com/tild6131-3733-4630-b866-346134336338/Studio_Session-141__.jpg' },
-    { id:'feniks-vechnoy-zhizni', n:'Феникс вечной жизни', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6461-3030-4232-b233-343163336265/676e910c-8c6d-4476-8.jpg', s:'https://static.tildacdn.com/tild3237-6231-4632-b233-653130616162/676e910c-8c6d-4476-8.jpg' },
-    { id:'sila-luny', n:'Сила Луны', cat:'Защита', loc:null, p:1390, brutal:true, g:'https://static.tildacdn.com/stor3566-6363-4632-a538-393737633236/14454747.jpg', s:'https://static.tildacdn.com/stor3739-3863-4964-a433-623732663631/30240028.jpg' },
-    { id:'runa-mir', n:'Руна Мир', cat:'Защита', loc:null, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3937-6131-4232-b537-386434663761/80005114.jpg', s:'https://static.tildacdn.com/stor6362-3034-4137-b065-636138393430/21769846.jpg' },
-    { id:'runa-alatyr', n:'Руна Алатырь', cat:'Защита', loc:null, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3964-3837-4361-b363-633536373564/47168734.jpg', s:'https://static.tildacdn.com/stor3539-3865-4234-b239-323333653763/20154485.jpg' },
-    { id:'runa-bereginya', n:'Руна Берегиня', cat:'Защита', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/stor3930-6666-4734-a535-373033353837/17976867.jpg', s:'https://static.tildacdn.com/stor3437-6239-4463-b561-623932306362/51510146.jpg' },
+    { id:'krylya-angela', n:'Крылья ангела', cat:'Защита', loc:null, cut:1, p:1490, g:'https://static.tildacdn.com/tild3464-3135-4630-b461-393362316231/Studio_Session-129__.jpg', s:'https://static.tildacdn.com/tild3334-3231-4530-b765-643065616665/Studio_Session-129__.jpg' },
+    { id:'uadzhet-oko-gora', n:'Уаджет, око Гора', cat:'Защита', loc:null, cut:1, p:1590, brutal:true, g:'https://static.tildacdn.com/tild6464-3036-4937-b433-396630323735/Studio_Session-208__.jpg', s:'https://static.tildacdn.com/tild3066-6364-4432-b063-363234333535/Studio_Session-208__.jpg' },
+    { id:'hristianskiy-krest', n:'Христианский крест', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3436-3666-4937-a232-386636653233/Studio_Session-183__.jpg', s:'https://static.tildacdn.com/tild6134-6163-4237-b863-346635613863/Studio_Session-183__.jpg' },
+    { id:'zvezda-davida', n:'Звезда Давида', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3430-3238-4131-b235-643338373365/Studio_Session-176__.jpg', s:'https://static.tildacdn.com/tild3939-6137-4562-b438-343637363337/Studio_Session-176__.jpg' },
+    { id:'hamsa-ruka-fatimy', n:'Хамса, рука Фатимы', cat:'Защита', loc:null, cut:1, p:1490, g:'https://static.tildacdn.com/tild3333-6431-4832-a632-353636653838/Studio_Session-231__.jpg', s:'https://static.tildacdn.com/tild3532-3435-4035-b861-303332333462/Studio_Session-231__.jpg' },
+    { id:'yakor-nadezhdy', n:'Якорь надежды', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3536-3763-4935-a437-336139636434/Studio_Session-197__.jpg', s:'https://static.tildacdn.com/tild3439-3063-4735-b532-303436316262/Studio_Session-197__.jpg' },
+    { id:'energiya-solnca', n:'Энергия солнца', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6634-3832-4335-a435-366532663866/Studio_Session-141__.jpg', s:'https://static.tildacdn.com/tild6131-3733-4630-b866-346134336338/Studio_Session-141__.jpg' },
+    { id:'feniks-vechnoy-zhizni', n:'Феникс вечной жизни', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6461-3030-4232-b233-343163336265/676e910c-8c6d-4476-8.jpg', s:'https://static.tildacdn.com/tild3237-6231-4632-b233-653130616162/676e910c-8c6d-4476-8.jpg' },
+    { id:'sila-luny', n:'Сила Луны', cat:'Защита', loc:null, cut:1, p:1390, brutal:true, g:'https://static.tildacdn.com/stor3566-6363-4632-a538-393737633236/14454747.jpg', s:'https://static.tildacdn.com/stor3739-3863-4964-a433-623732663631/30240028.jpg' },
+    { id:'runa-mir', n:'Руна Мир', cat:'Защита', loc:null, cut:1, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3937-6131-4232-b537-386434663761/80005114.jpg', s:'https://static.tildacdn.com/stor6362-3034-4137-b065-636138393430/21769846.jpg' },
+    { id:'runa-alatyr', n:'Руна Алатырь', cat:'Защита', loc:null, cut:1, p:1290, brutal:true, g:'https://static.tildacdn.com/stor3964-3837-4361-b363-633536373564/47168734.jpg', s:'https://static.tildacdn.com/stor3539-3865-4234-b239-323333653763/20154485.jpg' },
+    { id:'runa-bereginya', n:'Руна Берегиня', cat:'Защита', loc:null, cut:1, p:1490, brutal:true, g:'https://static.tildacdn.com/stor3930-6666-4734-a535-373033353837/17976867.jpg', s:'https://static.tildacdn.com/stor3437-6239-4463-b561-623932306362/51510146.jpg' },
     { id:'zamok-na-schaste', n:'Замок на счастье', cat:'Любовь', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild6265-6236-4934-b834-333830316362/Studio_Session-174__.jpg', s:'https://static.tildacdn.com/tild3235-3330-4230-a334-333364306265/Studio_Session-174__.jpg' },
     { id:'klyuch-ot-serdca', n:'Ключ от сердца', cat:'Любовь', loc:null, p:1490, brutal:true, g:'https://static.tildacdn.com/tild3834-3565-4961-a263-393738316635/Studio_Session-182__.jpg', s:'https://static.tildacdn.com/tild3833-3663-4638-b665-346264343636/Studio_Session-182__.jpg' },
     { id:'serdce-lyubvi', n:'Сердце любви', cat:'Любовь', loc:null, p:1490, g:'https://static.tildacdn.com/tild6164-6561-4266-b663-616261353633/Studio_Session-122__.jpg', s:'https://static.tildacdn.com/tild3264-3831-4161-b265-626534313563/Studio_Session-122__.jpg' },
@@ -435,6 +436,11 @@ body { background: #fff; margin: 0; }
   }
   function charmCut(plating, loc) {
     return ASSET + 'charms/' + plating + '/' + loc + '.webp';
+  }
+  // Resolve the live-mount image for a charm: CDN webp for `loc`, local PNG for `cut`.
+  function charmCutImg(charm, plating) {
+    if (charm.loc) return ASSET + 'charms/' + plating + '/' + charm.loc + '.webp';
+    return 'assets/charms/' + charm.id + '.png';
   }
   function colorsFor(material, geom) {
     let cols = BASES[material].colors;
@@ -555,7 +561,7 @@ body { background: #fff; margin: 0; }
 
   window.TOMAA = {
     ASSET, BASES, VARIANTS, CHARMS, CATS, MAX_CHARMS, CHARM_STEP,
-    baseImg, charmCut, colorsFor, charmPrice, charmPriceOld, fmt, addToCart,
+    baseImg, charmCut, charmCutImg, colorsFor, charmPrice, charmPriceOld, fmt, addToCart,
   };
 })();
 
@@ -705,15 +711,17 @@ body { background: #fff; margin: 0; }
       window.addEventListener('pointerup', up);
     };
     const charmImg = (c, left, topPct) => {
-      const dragging = dragId === c.id, med = !c.loc;
+      const dragging = dragId === c.id, med = !c.loc && !c.cut;
       const x = (dragging && dragPos) ? dragPos.x : left;
       const style = { left: x + '%', top: topPct + '%', width: w + '%' };
       if (med) style['--ring'] = c.pl === 'gold' ? '#c2933f' : '#9aa0a6';
+      // gold-only PNG cut-outs: simulate silver plating with a desaturating filter
+      if (!med && c.cut && c.pl === 'silver') style.filter = 'grayscale(1) brightness(1.08) contrast(.96) drop-shadow(0 6px 7px rgba(20,17,15,.28))';
       return h('img', {
         key: c.id, draggable: false, onPointerDown: (ev) => onCharmDown(ev, c),
         title: 'Нажмите, чтобы убрать · перетащите, чтобы переставить',
         className: 'charm' + (med ? ' medallion' : '') + (dragging ? ' dragging' : ''),
-        src: med ? (c.pl === 'gold' ? c.g : c.s) : T.charmCut(c.pl, c.loc), alt: '', style,
+        src: med ? (c.pl === 'gold' ? c.g : c.s) : T.charmCutImg(c, c.pl), alt: '', style,
       });
     };
     const layoutRow = (arr, y) => { const n = arr.length, start = 50 - step * (n - 1) / 2; return arr.map((c, i) => charmImg(c, start + i * step, y)); };
@@ -780,7 +788,7 @@ body { background: #fff; margin: 0; }
         'aria-pressed': on, 'aria-disabled': disabled, onClick: () => toggleCharm(c.id),
       },
         h('span', { className: 'add' }, on ? Check : Plus),
-        c.loc ? h('span', { className: 'cut', title: 'Примерка на браслете' }, Spark) : null,
+        (c.loc || c.cut) ? h('span', { className: 'cut', title: 'Примерка на браслете' }, Spark) : null,
         h('span', { className: 'ph', style: { backgroundImage: 'url(' + photo + ')' } }),
         h('span', { className: 'cn' }, c.n),
         h('span', { className: 'cp' },
